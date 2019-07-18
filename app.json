@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "izInput",
+    "slug": "izinput",
+    "privacy": "public",
+    "sdkVersion": "33.0.0",
+    "platforms": ["android"],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.alexishevia.izinput",
+      "permissions": []
+    },
+    "description": "IZ Input lets you manually add transactions to Invoice Zero - the personal finance system."
+  }
+}
