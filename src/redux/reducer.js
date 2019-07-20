@@ -4,7 +4,7 @@ import loading from "./loading";
 import errors from "./errors";
 
 const reducer = combineReducers({
-  loading: loading.reducer,
+  isLoading: loading.reducer,
   errors: errors.reducer,
   fileSystem: fileSystem.reducer
 });

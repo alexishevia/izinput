@@ -81,11 +81,11 @@ class Header extends React.Component {
   }
 
   render() {
-    const { subtitle } = this.props;
+    const { title, subtitle } = this.props;
     return (
       <Appbar.Header>
         {this.renderBackButton()}
-        <Appbar.Content title="MDo" subtitle={subtitle} />
+        <Appbar.Content title={title} subtitle={subtitle} />
         {this.renderMenu()}
       </Appbar.Header>
     );
@@ -93,6 +93,7 @@ class Header extends React.Component {
 }
 
 Header.defaultProps = {
+  title: "IZ Input",
   subtitle: "",
   includeBackButton: false,
   onGoBack: null,
@@ -102,6 +103,7 @@ Header.defaultProps = {
 
 Header.propTypes = {
   // ownProps
+  title: PropTypes.string,
   subtitle: PropTypes.string,
 
   // redux props
@@ -125,7 +127,8 @@ const fs = {
 };
 
 const mapStateToProps = state => ({
-  includeBackButton: fs.isMounted(state) && !fs.isRoot(state),
+  includeBackButton:
+    fs.isMounted(state) && !fs.isFileSelected(state) && !fs.isRoot(state),
   includeLogoutButton: fs.isMounted(state)
 });
 

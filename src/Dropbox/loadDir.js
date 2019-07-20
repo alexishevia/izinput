@@ -8,7 +8,7 @@ const getFileType = entry => {
 };
 
 const dropboxEntryToNode = entry => ({
-  type: getFileType(entry),
+  fileType: getFileType(entry),
   path: entry.path_lower,
   name: entry.name
 });

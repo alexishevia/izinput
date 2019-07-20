@@ -1,19 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { View } from "react-native";
-import { Portal, Text } from "react-native-paper";
+import { Portal } from "react-native-paper";
 import { connect } from "react-redux";
 import fileSystem from "../redux/fileSystem";
 import Errors from "./Errors";
 import Loading from "./Loading";
 import SelectFileSystem from "./SelectFileSystem";
+import FilePicker from "./FilePicker";
+import Home from "./Home";
 
 function Root({ isFileSystemMounted, isFileSelected }) {
   let content;
   if (isFileSelected) {
-    content = <Text>Render Home</Text>;
+    content = <Home />;
   } else if (isFileSystemMounted) {
-    content = <Text>Render File Picker</Text>;
+    content = <FilePicker />;
   } else {
     content = <SelectFileSystem />;
   }
@@ -36,7 +38,7 @@ Root.propTypes = {
 
 const mapStateToProps = state => ({
   isFileSystemMounted: fileSystem.selectors.isMounted(state),
-  isFileSelected: fileSystem.selectors.isMounted(state)
+  isFileSelected: fileSystem.selectors.isFileSelected(state)
 });
 
 const mapDispatchToProps = () => ({});
