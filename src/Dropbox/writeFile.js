@@ -13,8 +13,9 @@ export default async function dropboxWriteFile({
     // converting to Buffer to get around dropbox issue
     // https://github.com/dropbox/dropbox-sdk-js/issues/179
     contents: Buffer.from(text),
-    mode: { ".tag": "update", update: rev },
-    autorename: true // on conflict, Dropbox will autorename the file
+    // for more info about `mode` see:
+    // https://dropbox.github.io/dropbox-sdk-js/global.html#FilesCommitInfo
+    mode: { ".tag": "update", update: rev }
   });
   return {
     rev: metaData.rev || rev,

@@ -7,7 +7,6 @@ const useDropbox = async ({ dispatch, getState, mount }) => {
   const state = getState();
 
   if (loading.selectors.isLoading(state)) {
-    console.log("App is loading. Ignored useDropbox() call.");
     return;
   }
 

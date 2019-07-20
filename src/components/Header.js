@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Alert, Linking } from "react-native";
 import { Appbar, IconButton, Menu, withTheme } from "react-native-paper";
 import fileSystem from "../redux/fileSystem";
+import transactions from "../redux/transactions";
 
 const PRIVACY_POLICY = {
   title: "Privacy Policy",
@@ -48,10 +49,23 @@ class Header extends React.Component {
   }
 
   renderMenu() {
-    const { theme, includeLogoutButton, onLogout } = this.props;
+    const {
+      theme,
+      includeLogoutButton,
+      onLogout,
+      includeSaveButton,
+      onSave
+    } = this.props;
     const { menuVisible } = this.state;
 
-    const allItems = [PRIVACY_POLICY];
+    const allItems = [];
+
+    if (includeSaveButton && onSave) {
+      allItems.push({ title: "Save", onPress: () => onSave() });
+    }
+
+    allItems.push(PRIVACY_POLICY);
+
     if (includeLogoutButton && onLogout) {
       allItems.push({ title: "Log Out", onPress: () => this.logout() });
     }
@@ -106,7 +120,9 @@ Header.defaultProps = {
   includeBackButton: false,
   onGoBack: null,
   includeLogoutButton: false,
-  onLogout: null
+  onLogout: null,
+  includeSaveButton: false,
+  onSave: null
 };
 
 Header.propTypes = {
@@ -119,6 +135,8 @@ Header.propTypes = {
   onGoBack: PropTypes.func,
   includeLogoutButton: PropTypes.bool,
   onLogout: PropTypes.func,
+  includeSaveButton: PropTypes.bool,
+  onSave: PropTypes.func,
 
   // other
   theme: PropTypes.shape({
@@ -134,13 +152,18 @@ const fs = {
   ...fileSystem.actions
 };
 
-const mapStateToProps = state => ({
-  includeBackButton:
-    fs.isMounted(state) && !fs.isFileSelected(state) && !fs.isRoot(state),
-  includeLogoutButton: fs.isMounted(state)
-});
+const mapStateToProps = state => {
+  return {
+    includeSaveButton:
+      fs.isMounted(state) && transactions.selectors.hasPendingChanges(state),
+    includeBackButton:
+      fs.isMounted(state) && !fs.isFileSelected(state) && !fs.isRoot(state),
+    includeLogoutButton: fs.isMounted(state)
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
+  onSave: () => dispatch(transactions.actions.persist()),
   onGoBack: () => dispatch(fs.goBack()),
   onLogout: () => dispatch(fs.reset())
 });
