@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import fileSystem from "../redux/fileSystem";
 import Errors from "./Errors";
 import Loading from "./Loading";
+import SelectFileSystem from "./SelectFileSystem";
 
 function Root({ isFileSystemMounted, isFileSelected }) {
   let content;
@@ -14,7 +15,7 @@ function Root({ isFileSystemMounted, isFileSelected }) {
   } else if (isFileSystemMounted) {
     content = <Text>Render File Picker</Text>;
   } else {
-    content = <Text>Render login</Text>;
+    content = <SelectFileSystem />;
   }
 
   return (

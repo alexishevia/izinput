@@ -11,6 +11,7 @@
     "test-debug": "node --inspect-brk=0.0.0.0:9229 ./node_modules/.bin/jest"
   },
   "dependencies": {
+    "dropbox": "^4.0.28",
     "expo": "^33.0.0",
     "prop-types": "^15.7.2",
     "react": "16.8.3",
