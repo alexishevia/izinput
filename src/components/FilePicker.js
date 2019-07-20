@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { View, ScrollView, RefreshControl } from "react-native";
+import { View, ScrollView, FlatList, RefreshControl } from "react-native";
 import { Paragraph } from "react-native-paper";
 import Header from "./Header";
 import FilePickerItem from "./FilePickerItem";
@@ -23,34 +23,52 @@ class FilePicker extends React.Component {
   }
 
   renderContents() {
-    const { onOpenNode, contents } = this.props;
-    if (!contents) return null;
-    if (!contents.length) {
+    const { contents, onRefresh, onOpenNode } = this.props;
+
+    if (!contents) {
       return (
-        <Paragraph style={{ marginLeft: 5 }}>The directory is empty.</Paragraph>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={false} onRefresh={onRefresh} />
+          }
+        />
       );
     }
-    return contents.map(node => (
-      <FilePickerItem
-        key={node.path}
-        node={node}
-        onPress={() => onOpenNode(node)}
-      />
-    ));
-  }
 
-  render() {
-    const { onRefresh, path } = this.props;
-    return (
-      <View style={{ flex: 1 }}>
-        <Header title="Select Transactions File" subtitle={path} />
+    if (!contents.length) {
+      return (
         <ScrollView
           refreshControl={
             <RefreshControl refreshing={false} onRefresh={onRefresh} />
           }
         >
-          {this.renderContents()}
+          <Paragraph style={{ marginLeft: 5 }}>
+            The directory is empty.
+          </Paragraph>
         </ScrollView>
+      );
+    }
+
+    return (
+      <FlatList
+        refreshControl={
+          <RefreshControl refreshing={false} onRefresh={onRefresh} />
+        }
+        data={contents}
+        keyExtractor={item => item.path}
+        renderItem={({ item }) => (
+          <FilePickerItem node={item} onPress={() => onOpenNode(item)} />
+        )}
+      />
+    );
+  }
+
+  render() {
+    const { path } = this.props;
+    return (
+      <View style={{ flex: 1 }}>
+        <Header title="Select Transactions File" subtitle={path} />
+        {this.renderContents()}
       </View>
     );
   }

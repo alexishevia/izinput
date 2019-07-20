@@ -1,15 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { View, Text } from "react-native";
-import Header from "./Header";
+import { View } from "react-native";
 import fileSystem from "../redux/fileSystem";
+import Header from "./Header";
+import NewTransaction from "./NewTransaction";
+import TransactionList from "./TransactionList";
 
 function Home({ path }) {
   return (
     <View style={{ flex: 1 }}>
       <Header subtitle={path} />
-      <Text>Home</Text>
+      <NewTransaction />
+      <TransactionList />
     </View>
   );
 }
