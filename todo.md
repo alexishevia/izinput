@@ -1,2 +1,1 @@
-- [ ] create transactions
 - [ ] sync to dropbox file

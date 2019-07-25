@@ -11,12 +11,12 @@ import thunk from "redux-thunk";
 import { PersistGate } from "redux-persist/integration/react";
 
 import reducer from "./src/redux/reducer";
-import Index from "./src/components/Index";
+import Root from "./src/components/Root";
 
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  blacklist: ["isLoading", "errors"]
+  blacklist: ["errors"]
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);
@@ -36,7 +36,7 @@ export default function Main() {
     <ReduxProvider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <PaperProvider>
-          <Index />
+          <Root />
         </PaperProvider>
       </PersistGate>
     </ReduxProvider>

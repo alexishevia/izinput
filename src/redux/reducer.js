@@ -1,12 +1,14 @@
 import { combineReducers } from "redux";
-import loading from "./loading";
 import errors from "./errors";
+import router from "./router";
 import transactions from "./transactions";
+import dropbox from "./dropbox";
 
 const reducer = combineReducers({
-  isLoading: loading.reducer,
   errors: errors.reducer,
-  transactions: transactions.reducer
+  route: router.reducer,
+  transactions: transactions.reducer,
+  dropbox: dropbox.reducer
 });
 
 export default reducer;
