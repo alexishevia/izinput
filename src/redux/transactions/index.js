@@ -1,6 +1,5 @@
 import { createSlice } from "redux-starter-kit";
 import uuid from "uuid/v1";
-import persist from "./persist";
 
 const newTransaction = ({ charge, description }) => ({
   id: uuid(),
@@ -35,10 +34,6 @@ const slice = createSlice({
     }
   }
 });
-
-slice.actions.persist = () => (dispatch, getState) => {
-  return persist({ dispatch, getState, slice });
-};
 
 slice.selectors = {
   all: state => state.transactions,
