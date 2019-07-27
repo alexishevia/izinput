@@ -2,13 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Button } from "react-native-paper";
 import { connect } from "react-redux";
-import Dropbox from "../../lib/Dropbox";
-import dropbox from "../../redux/dropbox";
+import login from "../api/login";
+import dropbox from "../redux";
 import errors from "../../redux/errors";
 
 const loginToDropbox = () => async dispatch => {
   try {
-    const accessToken = await Dropbox.login();
+    const accessToken = await login();
     dispatch(dropbox.actions.login(accessToken));
   } catch (err) {
     dispatch(

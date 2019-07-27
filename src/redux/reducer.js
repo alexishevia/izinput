@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 import errors from "./errors";
 import router from "./router";
 import transactions from "./transactions";
-import dropbox from "./dropbox";
+import dropbox from "../Dropbox/redux";
 
 const reducer = combineReducers({
   errors: errors.reducer,

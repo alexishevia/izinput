@@ -18,13 +18,16 @@ const slice = createSlice({
   initialState,
   reducers: {
     login: (state, { payload: accessToken }) => ({ ...state, accessToken }),
-    logout: () => initialState
+    logout: () => initialState,
+    selectFile: (state, { payload: filepath }) => ({ ...state, filepath }),
   }
 });
 
 slice.selectors = {
   isLoggedIn: state => !!state.dropbox.accessToken,
-  isFileSelected: state => !!state.dropbox.filepath
+  isFileSelected: state => !!state.dropbox.filepath,
+  getAccessToken: state => state.dropbox.accessToken,
+  getFilePath: state => state.dropbox.filepath,
 };
 
 export default slice;

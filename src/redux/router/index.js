@@ -10,7 +10,8 @@ import { createSlice } from "redux-starter-kit";
 
 const ROUTES = {
   HOME: "/home",
-  SETTINGS: "/settings"
+  SETTINGS: "/settings",
+  DROPBOX_FILE_PICKER: "/dropboxFilePicker"
 };
 
 const slice = createSlice({
@@ -24,10 +25,13 @@ const slice = createSlice({
 
 slice.actions.goToHome = () => slice.actions.set(ROUTES.HOME);
 slice.actions.goToSettings = () => slice.actions.set(ROUTES.SETTINGS);
+slice.actions.goToDropboxFilePicker = () =>
+  slice.actions.set(ROUTES.DROPBOX_FILE_PICKER);
 
 slice.selectors = {
-  atHome: state => state.route === ROUTES.HOME,
-  atSettings: state => state.route === ROUTES.SETTINGS
+  currentRoute: state => state.route
 };
+
+slice.ROUTES = ROUTES;
 
 export default slice;

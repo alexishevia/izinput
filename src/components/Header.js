@@ -5,6 +5,8 @@ import { Linking } from "react-native";
 import { Appbar, IconButton, Menu, withTheme } from "react-native-paper";
 import router from "../redux/router";
 
+const { ROUTES } = router;
+
 const PRIVACY_POLICY = {
   title: "Privacy Policy",
   onPress: () =>
@@ -113,7 +115,8 @@ Header.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  displaySettingsButton: !router.selectors.atSettings(state)
+  displaySettingsButton:
+    router.selectors.currentRoute(state) !== ROUTES.SETTINGS
 });
 
 const mapDispatchToProps = dispatch => ({
