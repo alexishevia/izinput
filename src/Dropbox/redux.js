@@ -10,7 +10,13 @@ import { createSlice } from "redux-starter-kit";
 
 const initialState = {
   accessToken: null,
-  filepath: null
+  filepath: null,
+  sync: {
+    startTimestamp: null,
+    completeTimestamp: null,
+    errorTimestamp: null,
+    error: null
+  }
 };
 
 const slice = createSlice({
@@ -19,7 +25,7 @@ const slice = createSlice({
   reducers: {
     login: (state, { payload: accessToken }) => ({ ...state, accessToken }),
     logout: () => initialState,
-    selectFile: (state, { payload: filepath }) => ({ ...state, filepath }),
+    selectFile: (state, { payload: filepath }) => ({ ...state, filepath })
   }
 });
 
@@ -27,7 +33,7 @@ slice.selectors = {
   isLoggedIn: state => !!state.dropbox.accessToken,
   isFileSelected: state => !!state.dropbox.filepath,
   getAccessToken: state => state.dropbox.accessToken,
-  getFilePath: state => state.dropbox.filepath,
+  getFilePath: state => state.dropbox.filepath
 };
 
 export default slice;

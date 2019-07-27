@@ -14,13 +14,13 @@ const { ROUTES } = router;
 
 class Root extends React.Component {
   renderScreen() {
-    const { route, goToSettings, onError } = this.props;
+    const { route, goToHome, goToSettings, onError } = this.props;
     const screen = {
       [ROUTES.HOME]: () => <Home />,
       [ROUTES.SETTINGS]: () => <Settings />,
       [ROUTES.DROPBOX_FILE_PICKER]: () => (
         <DropboxFilePicker
-          onSuccess={goToSettings}
+          onSuccess={goToHome}
           onCancel={goToSettings}
           onError={onError}
         />
@@ -49,6 +49,7 @@ Root.propTypes = {
   // redux props
   route: PropTypes.string,
   goToSettings: PropTypes.func.isRequired,
+  goToHome: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired
 };
 
@@ -58,6 +59,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   goToSettings: () => dispatch(router.actions.goToSettings()),
+  goToHome: () => dispatch(router.actions.goToHome()),
   onError: err => dispatch(errors.actions.push(err))
 });
 
