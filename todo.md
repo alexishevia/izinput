@@ -1,1 +1,6 @@
-- [ ] sync to dropbox file
+- [ ] test sync
+- [ ] handle adding duplicate id
+- [ ] handle updating inexistent id
+- [ ] show some notification when sync is running/complete/error
+- [ ] allow sync on pull down
+- [ ] auto sync after add + x time?

@@ -47,7 +47,8 @@ const slice = createSlice({
       return state
         .map(tx => (updateMap[tx.id] ? updateMap[tx.id] : tx))
         .filter(stateLimit);
-    }
+    },
+    reset: (state, { payload: transactions }) => transactions
   }
 });
 
