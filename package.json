@@ -6,7 +6,10 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "lint": "eslint src/**/*.js"
+    "lint": "eslint src/**/*.js",
+    "test": "jest",
+    "test-debug": "node --inspect-brk=0.0.0.0:9229 ./node_modules/.bin/jest",
+    "docs": "docsify serve ./docs"
   },
   "dependencies": {
     "dropbox": "^4.0.28",
@@ -26,22 +29,28 @@
   },
   "devDependencies": {
     "babel-preset-expo": "^5.1.1",
+    "docsify-cli": "^4.3.0",
     "eslint": "^6.0.1",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jest": "^22.14.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.2",
     "husky": "^3.0.0",
+    "jest": "^24.8.0",
     "lint-staged": "^9.2.0",
     "prettier": "^1.18.2"
+  },
+  "jest": {
+    "preset": "react-native"
   },
   "private": true,
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "npm run lint"
+      "pre-push": "npm run lint && npm run test"
     }
   },
   "lint-staged": {
