@@ -10,7 +10,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import thunk from "redux-thunk";
 import { PersistGate } from "redux-persist/integration/react";
 
-import reducer from "./src/redux/reducer";
+import reducer from "./src/reducer";
 import Root from "./src/components/Root";
 
 const persistConfig = {

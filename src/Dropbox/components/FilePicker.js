@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { View, FlatList } from "react-native";
 import { ActivityIndicator, Portal, Paragraph } from "react-native-paper";
 import loadDir from "../api/loadDir";
-import dropbox from "../redux";
+import slice from "../slice";
 import Header from "./FilePickerHeader";
 import FilePickerItem from "./FilePickerItem";
 
@@ -141,12 +141,12 @@ FilePicker.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  accessToken: dropbox.selectors.getAccessToken(state)
+  accessToken: slice.selectors.getAccessToken(state)
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onFilePick: filepath => {
-    dispatch(dropbox.actions.selectFile(filepath));
+    dispatch(slice.actions.selectFile(filepath));
     ownProps.onSuccess();
   }
 });

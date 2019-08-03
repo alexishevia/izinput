@@ -44,7 +44,11 @@
     "prettier": "^1.18.2"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "testPathIgnorePatterns": [
+      "/node_modules",
+      "__tests__/helpers/"
+    ]
   },
   "private": true,
   "husky": {
@@ -54,7 +58,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx,json,md}": [
+    "*.{js,jsx,json}": [
       "prettier --write",
       "git add"
     ]

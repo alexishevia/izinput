@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Linking } from "react-native";
 import { Appbar, IconButton, Menu, withTheme } from "react-native-paper";
-import router from "../redux/router";
+import router from "../router/slice";
 
 const { ROUTES } = router;
 

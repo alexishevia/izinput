@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { View } from "react-native";
 import Header from "./Header";
-import router from "../redux/router";
+import router from "../router/slice";
 import DropboxSettings from "../Dropbox/components/Settings";
 
 function Settings({ goToHome, goToDropboxFilePicker }) {

@@ -29,12 +29,11 @@ The redux store used by IZ Input has the following format:
     filepath: "/path/to/file.ndjson"
   }
 
-  // used by the sync algorithm. Stores actions that have been recorded locally
-  // but not synced to Dropbox yet
-  localActions: [ { ...action1 }, { ...action2 } ],
-
-  // timestamps for sync attemtps
   sync: {
+    // actions that have been recorded locally but not synced to Dropbox yet
+    localActions: [ { ...action1 }, { ...action2 } ],
+
+    // timestamps for sync attemtps
     startedAt: "2019-07-28T22:19:23.102Z",
     succeededAt: "2019-07-28T22:19:41.181Z",
     failedAt: "2019-07-28T22:19:00.843Z",
@@ -67,7 +66,7 @@ I'm following the [redux](https://redux.js.org/) approach, where state is modifi
 Transactions can only be modified using these actions:
 
 ```
-{ "type": "transactions/set", "payload": { id, type, charge, description, modifiedAt } }
+{ "type": "transactions/put", "payload": { id, charge, category, description, modifiedAt } }
 { "type": "transactions/delete", "payload": { id, deletedAt } }
 ```
 
@@ -75,8 +74,8 @@ Transactions can only be modified using these actions:
 
 The following operations are considered conflicts, and are **ignored** by reducers:
 
-- `transactions/set` with `modifiedAt <= existingTransaction.modifiedAt`.
-- `transactions/set` with `deletedAt <= existingTransaction.modifiedAt`.
+- `transactions/put` with `modifiedAt <= existingTransaction.modifiedAt`.
+- `transactions/put` with `deletedAt <= existingTransaction.modifiedAt`.
 - `transactions/delete` with `deletedAt <= existingTransaction.modifiedAt`.
 
 ## Sync
@@ -90,26 +89,24 @@ IZ Input applications usually have 3 "data stores" active at the same time:
 1. playbook  
    The playbook is a [Newline Delimited JSON](http://ndjson.org/) file that lives
    in Dropbox.
-
-- The playbook is considered the source of truth.
-- Every line in the playbook corresponds to an action.
-- The playbook is append-only. Applications are allowed to append new actions
-  to the playbook, but MUST NOT modify existing actions.
-- Applications MUST process actions in the same order as they exist in the
-  playbook.
-- Multiple applications can sync to a single playbook. eg: the mobile app and desktop app for the same user.
-- The playbook is versioned, and every version is identified through a `revision` string.
+   - The playbook is considered the source of truth.
+   - Every line in the playbook corresponds to an action.
+   - The playbook is append-only. Applications are allowed to append new actions
+     to the playbook, but MUST NOT modify existing actions.
+   - Applications MUST process actions in the same order as they exist in the
+     playbook.
+   - Multiple applications can sync to a single playbook. eg: the mobile app and desktop app for the same user.
+   - The playbook is versioned, and every version is identified through a `revision` string.
 
 2. redux store  
    This is the plain-old store you would see in any redux application. It is kept in memory, and through the [redux-persist](https://github.com/rt2zz/redux-persist) module, also persisted to `AsyncStorage`.  
    One caveat: the redux store must keep a `localActions` array. Any action with potential to modify the playbook should be added to `localActions`.
 3. local file  
    A JSON file kept in `AsyncStorage` that stores the following data:
-
-- `playbook`: local copy of the playbook.
-- `revision`: last known `revision` of the playbook.
-- `lineCount`: last known line count for the playbook.
-- `store`: redux store built by processing all actions in the playbook.
+   - `text`: local copy of the playbook text.
+   - `revision`: last known `revision` of the playbook.
+   - `lineCount`: last known line count for the playbook.
+   - `store`: redux store built by processing all actions in the playbook.
 
 Synchronization is executed in 2 steps, in sequential order:
 
@@ -121,7 +118,7 @@ Synchronization is executed in 2 steps, in sequential order:
 1. Load and parse `localFile` from `AsyncStorage`.
 2. Query playbook's latest revision.
 3. If `latest revision === localFile.revision`, "download playbook" is complete. Otherwise, continue on step 4.
-4. Download the playbook's text into `localFile.playbook`, and the playbook's revision into `localFile.revision`.
+4. Download the playbook's text into `localFile.text`, and the playbook's revision into `localFile.revision`.
 5. Parse playbook lines bigger than `localFile.lineCount`, and apply the actions to `localFile.store`.
 6. Update the `localFile.lineCount` value.
 7. Save the new `localFile` into `AsyncStorage`.
@@ -131,8 +128,8 @@ Synchronization is executed in 2 steps, in sequential order:
 1. Create a copy of `localActions`, call it `actionsToUpload`.
 2. If `actionsToUpload` is empty, continue on step 9. Otherwise, continue on step 2.
 3. Apply `actionsToUpload` to `localFile.store`.
-4. Attach `actionsToUpload` (serialized as [ndjson](http://ndjson.org/)) to the end of `localFile.playbook`.
-5. Upload `localFile.playbook` to Dropbox.  
+4. Attach `actionsToUpload` (serialized as [ndjson](http://ndjson.org/)) to the end of `localFile.text`.
+5. Upload `localFile.text` to Dropbox.  
    Notes:
    - if Dropbox reports a conflict, restart sync from the "download playbook" flow.
    - Optional: You can keep track of any action in `actionsToUpload` that was ignored, and NOT attach it to the playbook.
@@ -140,15 +137,12 @@ Synchronization is executed in 2 steps, in sequential order:
 7. Save the new `localFile` into `AsyncStorage`.
 8. If there are any `reduxStore.localActions` that are not present in `actionsToUpload` (created while the sync was in process), apply them to `localFile.store`.
 9. Update the redux store.
-
-- override `reduxStore` with `localFile.store`
-- remove any action in `actionsToUpload` from `reduxStore.localActions`
+    - override `reduxStore` with `localFile.store`
+    - remove any action in `actionsToUpload` from `reduxStore.localActions`
 
 ## Sync frequency
 
-I still haven't figured out how often to run sync, but it seems like:
+I still haven't figured out how often to run sync, but I need to make sure to:
 
-- we should avoid running multiple sync operations in parallel
-- we should figure out how to display some info to the user regarding sync status
-
-That is why I've created the `reduxStore.sync` property.
+- avoid running multiple sync operations in parallel
+- display some info to the user regarding sync status

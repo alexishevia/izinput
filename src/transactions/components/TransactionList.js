@@ -3,10 +3,10 @@ import { FlatList } from "react-native";
 import { List } from "react-native-paper";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import transactions from "../redux/transactions";
+import slice from "../slice";
 
 function Transaction({ charge, description }) {
-  return <List.Item title={`$${charge} - ${description}`} />;
+  return <List.Item title={`$${charge.toFixed(2)} - ${description}`} />;
 }
 
 Transaction.propTypes = {
@@ -35,7 +35,7 @@ TransactionList.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  transactions: transactions.selectors.all(state)
+  transactions: slice.selectors.newest(state)
 });
 
 const mapDispatchToProps = () => ({});

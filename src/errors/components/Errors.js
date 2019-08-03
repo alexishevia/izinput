@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Button, Dialog, Paragraph } from "react-native-paper";
-import errorsSlice from "../redux/errors";
+import errorsSlice from "../slice";
 
 function Errors({ errors, onErrorsDismiss }) {
   const visible = errors && errors.length;

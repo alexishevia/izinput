@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import PropTypes from "prop-types";
 import { TextInput, Button } from "react-native-paper";
 import { connect } from "react-redux";
-import transactions from "../redux/transactions";
+import slice from "../slice";
 
 const styles = StyleSheet.create({
   container: {
@@ -76,7 +76,7 @@ const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
   onAdd: ({ charge, description }) =>
-    dispatch(transactions.actions.add({ charge, description }))
+    dispatch(slice.actions.put({ charge, description }))
 });
 
 export default connect(

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Button } from "react-native-paper";
-import dropbox from "../redux";
+import slice from "../slice";
 
 function LogoutButton({ onPress }) {
   return <Button onPress={onPress}>Disconnect</Button>;
@@ -16,7 +16,7 @@ LogoutButton.propTypes = {
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
-  onPress: () => dispatch(dropbox.actions.logout())
+  onPress: () => dispatch(slice.actions.logout())
 });
 
 export default connect(

@@ -19,7 +19,7 @@ const readFileBlob = fileBlob =>
 export default async function dropboxLoadFile({ accessToken, path }) {
   const dropbox = new Dropbox({ fetch: global.fetch, accessToken });
   const response = await dropbox.filesDownload({ path });
-  const { rev, fileBlob } = response;
+  const { rev: revision, fileBlob } = response;
   const text = await readFileBlob(fileBlob);
-  return { rev, text };
+  return { revision, text };
 }

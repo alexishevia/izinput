@@ -1,4 +1,6 @@
 - [ ] test sync
+- [ ] figure out when to run synchronization
+- [ ] prevent running a synchronization if another one is running
 - [ ] handle adding duplicate id
 - [ ] handle updating inexistent id
 - [ ] show some notification when sync is running/complete/error

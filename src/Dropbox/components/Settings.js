@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { View } from "react-native";
 import { Title, Text, Button } from "react-native-paper";
-import dropbox from "../redux";
+import slice from "../slice";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
 
@@ -128,9 +128,9 @@ DropboxSettings.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  isLoggedIn: dropbox.selectors.isLoggedIn(state),
-  isFileSelected: dropbox.selectors.isFileSelected(state),
-  filepath: dropbox.selectors.getFilePath(state)
+  isLoggedIn: slice.selectors.isLoggedIn(state),
+  isFileSelected: slice.selectors.isFileSelected(state),
+  filepath: slice.selectors.getFilePath(state)
 });
 
 const mapDispatchToProps = () => ({});

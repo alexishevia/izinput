@@ -11,12 +11,6 @@ import { createSlice } from "redux-starter-kit";
 const initialState = {
   accessToken: null,
   filepath: null,
-  sync: {
-    startTimestamp: null,
-    completeTimestamp: null,
-    errorTimestamp: null,
-    error: null
-  }
 };
 
 const slice = createSlice({
