@@ -28,9 +28,14 @@ export default function DropboxRemoteStorage(store) {
   }
 
   // push() saves data to Dropbox
-  async function push({ text: newText }) {
+  async function push({ text: newText, revision: prevRevision }) {
     text = newText;
-    const newValues = await writeFile({ accessToken, path, text, revision });
+    const newValues = await writeFile({
+      accessToken,
+      path,
+      text,
+      revision: prevRevision
+    });
     ({ revision } = newValues);
   }
 

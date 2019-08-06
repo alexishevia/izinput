@@ -6,7 +6,9 @@ import { connect } from "react-redux";
 import slice from "../slice";
 
 function Transaction({ charge, description }) {
-  return <List.Item title={`$${charge.toFixed(2)} - ${description}`} />;
+  const prefix = charge < 0 ? "-" : "";
+  const formatted = Math.abs(charge).toFixed(2);
+  return <List.Item title={`${prefix}$${formatted} ${description}`} />;
 }
 
 Transaction.propTypes = {

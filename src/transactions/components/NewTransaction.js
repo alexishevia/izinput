@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { TextInput, Button } from "react-native-paper";
 import { connect } from "react-redux";
 import slice from "../slice";
+import syncThunk from "../../sync/thunk";
 
 const styles = StyleSheet.create({
   container: {
@@ -25,9 +26,14 @@ class NewTransaction extends React.Component {
     this.state = initialState();
   }
 
+  componentDidMount() {
+    const { sync: runSync } = this.props;
+    runSync();
+  }
+
   save() {
     const { charge, description } = this.state;
-    const { onAdd } = this.props;
+    const { onAdd, sync } = this.props;
     const chargeAmount = parseFloat(charge, 10);
     if (chargeAmount === 0 || Number.isNaN(chargeAmount)) {
       return;
@@ -36,6 +42,7 @@ class NewTransaction extends React.Component {
       return;
     }
     onAdd({ charge: chargeAmount, description });
+    sync();
     this.setState(initialState());
   }
 
@@ -69,14 +76,17 @@ class NewTransaction extends React.Component {
 }
 
 NewTransaction.propTypes = {
-  onAdd: PropTypes.func.isRequired
+  onAdd: PropTypes.func.isRequired,
+  sync: PropTypes.func.isRequired
 };
 
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
-  onAdd: ({ charge, description }) =>
-    dispatch(slice.actions.put({ charge, description }))
+  onAdd: ({ charge, description }) => {
+    dispatch(slice.actions.put({ charge, description }));
+  },
+  sync: () => dispatch(syncThunk())
 });
 
 export default connect(

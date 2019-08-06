@@ -29,7 +29,7 @@ The redux store used by IZ Input has the following format:
     filepath: "/path/to/file.ndjson"
   }
 
-  sync: {
+  _sync: {
     // actions that have been recorded locally but not synced to Dropbox yet
     localActions: [ { ...action1 }, { ...action2 } ],
 

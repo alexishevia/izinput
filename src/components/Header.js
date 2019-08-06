@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Linking } from "react-native";
 import { Appbar, IconButton, Menu, withTheme } from "react-native-paper";
 import router from "../router/slice";
+import syncThunk from "../sync/thunk";
 
 const { ROUTES } = router;
 
@@ -37,13 +38,14 @@ class Header extends React.Component {
   }
 
   renderMenu() {
-    const { theme, displaySettingsButton, goToSettings } = this.props;
+    const { theme, displaySettingsButton, goToSettings, sync } = this.props;
     const { menuVisible } = this.state;
 
     const allItems = [];
     if (displaySettingsButton) {
       allItems.push({ title: "Settings", onPress: goToSettings });
     }
+    allItems.push({ title: "Sync", onPress: sync });
     allItems.push(PRIVACY_POLICY);
     if (!allItems.length) return null;
 
@@ -104,6 +106,7 @@ Header.propTypes = {
   // redux props
   displaySettingsButton: PropTypes.bool,
   goToSettings: PropTypes.func,
+  sync: PropTypes.func.isRequired,
 
   // other
   theme: PropTypes.shape({
@@ -120,7 +123,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  goToSettings: () => dispatch(router.actions.goToSettings())
+  goToSettings: () => dispatch(router.actions.goToSettings()),
+  sync: () => dispatch(syncThunk())
 });
 
 export default connect(

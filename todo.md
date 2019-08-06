@@ -1,8 +1,3 @@
-- [ ] test sync
-- [ ] figure out when to run synchronization
-- [ ] prevent running a synchronization if another one is running
 - [ ] handle adding duplicate id
 - [ ] handle updating inexistent id
-- [ ] show some notification when sync is running/complete/error
-- [ ] allow sync on pull down
-- [ ] auto sync after add + x time?
+- [ ] limit amount of transactions kept in state

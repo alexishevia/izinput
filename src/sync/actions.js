@@ -14,7 +14,7 @@ export function success(time) {
 }
 
 export function fail({ time, errorMessage } = {}) {
-  return { type: SUCCESS, payload: { time, errorMessage } };
+  return { type: FAIL, payload: { time, errorMessage } };
 }
 
 export function rehydrateStore(newStoreState) {

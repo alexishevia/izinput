@@ -8,7 +8,7 @@ export default async function dropboxWriteFile({
   revision
 }) {
   const dropbox = new Dropbox({ fetch: global.fetch, accessToken });
-  const metaData = await dropbox.filesUpload({
+  const args = {
     path,
     // converting to Buffer to get around dropbox issue
     // https://github.com/dropbox/dropbox-sdk-js/issues/179
@@ -16,7 +16,8 @@ export default async function dropboxWriteFile({
     // for more info about `mode` see:
     // https://dropbox.github.io/dropbox-sdk-js/global.html#FilesCommitInfo
     mode: { ".tag": "update", update: revision }
-  });
+  };
+  const metaData = await dropbox.filesUpload(args);
   return {
     revision: metaData.rev || revision,
     path: metaData.path_lower || path

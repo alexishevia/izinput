@@ -6,6 +6,9 @@ export const PENDING = "PENDING"; // there are pending changes since last sync
 export const RUNNING = "RUNNING"; // sync is currently executing
 export const FAILED = "FAILED"; // last sync failed
 
+const ONE_MINUTE = 60 * 1000;
+const TIMEOUT = ONE_MINUTE;
+
 export function getLocalActions(state) {
   return (state._sync && state._sync.localActions) || [];
 }
@@ -13,7 +16,8 @@ export function getLocalActions(state) {
 export function getSyncState(state) {
   const { startedAt = 0, succeededAt = 0, failedAt = 0 } = state._sync || {};
   if (startedAt > succeededAt && startedAt > failedAt) {
-    return RUNNING;
+    const now = new Date().getTime();
+    return now - startedAt > TIMEOUT ? FAILED : RUNNING;
   }
   if (failedAt >= succeededAt) {
     return FAILED;
@@ -22,6 +26,10 @@ export function getSyncState(state) {
     return PENDING;
   }
   return succeededAt > 0 ? SYNCED : UNKNOWN;
+}
+
+export function getErrorMessage(state) {
+  return state._sync && state._sync.errorMessage;
 }
 
 export function isSyncRunning(state) {

@@ -3,13 +3,15 @@ import LocalAsyncStorage from "./LocalAsyncStorage";
 import runSynchronization from "./run";
 import { start, success, fail } from "./actions";
 import { isSyncRunning } from "./selectors";
+import stringifyError from "./stringifyError";
 
 const DEFAULT_KEY = "IZINPUT_LOCAL_FILE";
 
 // new LocalAsyncStorage.reset(DEFAULT_KEY).reset();
 
 export default async function sync({ store, remoteStorage, localStorage }) {
-  if (!store) throw new Error("store is required");
+  if (!store || !store.getState || !store.dispatch)
+    throw new Error("store is required");
   if (isSyncRunning(store.getState())) {
     console.log("sync is already running. ignoring new sync() call");
     return;
@@ -25,6 +27,7 @@ export default async function sync({ store, remoteStorage, localStorage }) {
     });
     store.dispatch(success());
   } catch (err) {
-    store.dispatch(fail({ errorMessage: err.message }));
+    console.log(err);
+    store.dispatch(fail({ errorMessage: stringifyError(err) }));
   }
 }
