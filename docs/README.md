@@ -103,6 +103,7 @@ IZ Input applications usually have 3 "data stores" active at the same time:
    One caveat: the redux store must keep a `localActions` array. Any action with potential to modify the playbook should be added to `localActions`.
 3. local file  
    A JSON file kept in `AsyncStorage` that stores the following data:
+   - `path`: path to the playbook on the remote file system.
    - `text`: local copy of the playbook text.
    - `revision`: last known `revision` of the playbook.
    - `lineCount`: last known line count for the playbook.
@@ -122,6 +123,8 @@ Synchronization is executed in 2 steps, in sequential order:
 5. Parse playbook lines bigger than `localFile.lineCount`, and apply the actions to `localFile.store`.
 6. Update the `localFile.lineCount` value.
 7. Save the new `localFile` into `AsyncStorage`.
+
+Note: if `remoteFile.path` is different than `localFile.path`, `localFile` is invalidated. A new sync runs assuming a blank local state.
 
 ### Upload localActions
 

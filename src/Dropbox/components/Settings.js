@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { View } from "react-native";
+import { View, Alert } from "react-native";
 import { Title, Text, Button } from "react-native-paper";
 import slice from "../slice";
 import LoginButton from "./LoginButton";
@@ -23,8 +23,17 @@ function LoggedOut() {
 }
 
 function ChangeFileButton({ onPress }) {
+  const onBtnPress = () =>
+    Alert.alert(
+      "Data Loss Warning",
+      "If you change the sync file, all local data will be discarded, and data from the new file will be loaded.\n\nAre you sure you want to change the sync file?",
+      [
+        { text: "Change file", onPress, style: "destructive" },
+        { text: "Keep Current File", onPress: () => {}, style: "cancel" }
+      ]
+    );
   return (
-    <Button style={{ marginRight: 20 }} onPress={onPress}>
+    <Button style={{ marginRight: 20 }} onPress={onBtnPress}>
       Change File
     </Button>
   );

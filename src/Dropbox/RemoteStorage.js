@@ -47,6 +47,9 @@ export default function DropboxRemoteStorage(store) {
     get revision() {
       return revision;
     },
+    get path() {
+      return path;
+    },
     getLatestRevision,
     pull,
     push

@@ -5,24 +5,43 @@ export default function LocalFile({ localStorage, remoteStorage }) {
   if (!localStorage) throw new Error("localStorage is required");
   if (!remoteStorage) throw new Error("remoteStorage is required");
 
-  let text = "";
-  let revision = null;
-  let lineCount = -1;
-  let store = createStore(reducer);
+  let path;
+  let text;
+  let revision;
+  let lineCount;
+  let store;
+
+  function reset() {
+    path = "";
+    text = "";
+    revision = null;
+    lineCount = -1;
+    store = createStore(reducer);
+  }
+
+  reset();
 
   // load() fetches data from localStorage
   async function load() {
     const str = await localStorage.read();
     if (!str) return;
     let initialState;
-    ({ text, revision, lineCount, store: initialState } = JSON.parse(str));
+    ({ path, text, revision, lineCount, store: initialState } = JSON.parse(
+      str
+    ));
     store = createStore(reducer, initialState);
   }
 
   // save() stores values into localStorage
   async function save() {
     await localStorage.write(
-      JSON.stringify({ text, revision, lineCount, store: store.getState() })
+      JSON.stringify({
+        path,
+        text,
+        revision,
+        lineCount,
+        store: store.getState()
+      })
     );
   }
 
@@ -42,6 +61,10 @@ export default function LocalFile({ localStorage, remoteStorage }) {
   // Note: also updates localStorage.
   async function pull() {
     await load();
+    if (remoteStorage.path !== path) {
+      reset();
+    }
+    ({ path } = remoteStorage);
     const latestRevision = await remoteStorage.getLatestRevision();
     if (latestRevision === revision) return;
     await remoteStorage.pull();
