@@ -92,7 +92,14 @@ class FilePicker extends React.Component {
 
   renderHeader() {
     const { path } = this.state;
-    return <Header subtitle={path} onGoBack={() => this.onGoBack()} />;
+    const { onFilePick } = this.props;
+    return (
+      <Header
+        subtitle={path}
+        onNewFile={filename => onFilePick(`${path}/${filename}`)}
+        onGoBack={() => this.onGoBack()}
+      />
+    );
   }
 
   renderContents() {

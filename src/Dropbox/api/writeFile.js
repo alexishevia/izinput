@@ -1,5 +1,6 @@
 import { Dropbox } from "dropbox";
 import { Buffer } from "buffer";
+import { NEW_FILE_REVISION } from "../constants";
 
 export default async function dropboxWriteFile({
   accessToken,
@@ -12,11 +13,16 @@ export default async function dropboxWriteFile({
     path,
     // converting to Buffer to get around dropbox issue
     // https://github.com/dropbox/dropbox-sdk-js/issues/179
-    contents: Buffer.from(text),
-    // for more info about `mode` see:
-    // https://dropbox.github.io/dropbox-sdk-js/global.html#FilesCommitInfo
-    mode: { ".tag": "update", update: revision }
+    contents: Buffer.from(text)
   };
+
+  // for more info about `mode` see:
+  // https://dropbox.github.io/dropbox-sdk-js/global.html#FilesCommitInfo
+  if (revision === NEW_FILE_REVISION) {
+    args.mode = { ".tag": "add" };
+  } else {
+    args.mode = { ".tag": "update", update: revision };
+  }
   const metaData = await dropbox.filesUpload(args);
   return {
     revision: metaData.rev || revision,

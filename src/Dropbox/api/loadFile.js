@@ -1,4 +1,6 @@
 import { Dropbox } from "dropbox";
+import { isNewFile } from "../errors";
+import { NEW_FILE_REVISION } from "../constants";
 
 const readFileBlob = fileBlob =>
   new Promise((resolve, reject) => {
@@ -18,7 +20,13 @@ const readFileBlob = fileBlob =>
 
 export default async function dropboxLoadFile({ accessToken, path }) {
   const dropbox = new Dropbox({ fetch: global.fetch, accessToken });
-  const response = await dropbox.filesDownload({ path });
+  let response;
+  try {
+    response = await dropbox.filesDownload({ path });
+  } catch (err) {
+    if (isNewFile(err)) return { revision: NEW_FILE_REVISION, text: "" };
+    throw err;
+  }
   const { rev: revision, fileBlob } = response;
   const text = await readFileBlob(fileBlob);
   return { revision, text };

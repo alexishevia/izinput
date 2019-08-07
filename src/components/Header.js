@@ -38,14 +38,22 @@ class Header extends React.Component {
   }
 
   renderMenu() {
-    const { theme, displaySettingsButton, goToSettings, sync } = this.props;
+    const {
+      theme,
+      displaySettingsButton,
+      displaySyncButton,
+      goToSettings,
+      sync
+    } = this.props;
     const { menuVisible } = this.state;
 
     const allItems = [];
     if (displaySettingsButton) {
       allItems.push({ title: "Settings", onPress: goToSettings });
     }
-    allItems.push({ title: "Sync", onPress: sync });
+    if (displaySyncButton) {
+      allItems.push({ title: "Sync", onPress: sync });
+    }
     allItems.push(PRIVACY_POLICY);
     if (!allItems.length) return null;
 
@@ -93,6 +101,7 @@ Header.defaultProps = {
   title: "IZ Input",
   subtitle: "",
   displaySettingsButton: false,
+  displaySyncButton: false,
   goToSettings: () => {},
   onGoBack: null
 };
@@ -105,6 +114,7 @@ Header.propTypes = {
 
   // redux props
   displaySettingsButton: PropTypes.bool,
+  displaySyncButton: PropTypes.bool,
   goToSettings: PropTypes.func,
   sync: PropTypes.func.isRequired,
 
@@ -119,7 +129,8 @@ Header.propTypes = {
 
 const mapStateToProps = state => ({
   displaySettingsButton:
-    router.selectors.currentRoute(state) !== ROUTES.SETTINGS
+    router.selectors.currentRoute(state) !== ROUTES.SETTINGS,
+  displaySyncButton: router.selectors.currentRoute(state) === ROUTES.HOME
 });
 
 const mapDispatchToProps = dispatch => ({
