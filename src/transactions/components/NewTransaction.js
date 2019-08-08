@@ -57,13 +57,13 @@ class NewTransaction extends React.Component {
         <TextInput
           style={styles.input}
           mode="outlined"
-          label="Monto"
+          label="Amount"
           value={charge}
           onChangeText={val => this.setState({ charge: val })}
         />
         <TextInput
           style={styles.input}
-          label="Categoría"
+          label="Category"
           mode="outlined"
           value=" "
           render={() => (
@@ -81,7 +81,7 @@ class NewTransaction extends React.Component {
         <TextInput
           style={styles.input}
           mode="outlined"
-          label="Descripción"
+          label="Description"
           value={description}
           onChangeText={val => this.setState({ description: val })}
         />
@@ -91,7 +91,7 @@ class NewTransaction extends React.Component {
           mode="contained"
           onPress={() => this.save()}
         >
-          Agregar
+          Add
         </Button>
       </View>
     );

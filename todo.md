@@ -1,3 +1,2 @@
-- [ ] allow editing categories
-- [ ] allow deleting categories
 - [ ] add error indicator to new transaction form
+- [ ] use react-native-paper theme for button colors

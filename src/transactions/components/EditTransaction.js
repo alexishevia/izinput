@@ -95,7 +95,7 @@ class EditTransaction extends React.Component {
             mode="contained"
             onPress={() => this.save()}
           >
-            Editar
+            Edit
           </Button>
           <Button
             style={styles.input}
@@ -104,7 +104,7 @@ class EditTransaction extends React.Component {
             mode="contained"
             onPress={() => this.delete()}
           >
-            Borrar
+            Delete
           </Button>
           <Button
             style={styles.input}
@@ -114,7 +114,7 @@ class EditTransaction extends React.Component {
             mode="contained"
             onPress={onDone}
           >
-            Cancelar
+            Cancel
           </Button>
         </View>
       </View>
