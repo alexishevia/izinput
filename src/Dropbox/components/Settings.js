@@ -10,9 +10,7 @@ import LogoutButton from "./LogoutButton";
 function LoggedOut() {
   return (
     <View>
-      <Text>
-        You can connect to Dropbox and sync your transactions to a file.
-      </Text>
+      <Text>You can connect to Dropbox to backup/sync your transactions.</Text>
       <View
         style={{ flexDirection: "row", justifyContent: "center", padding: 10 }}
       >
