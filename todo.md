@@ -1,6 +1,3 @@
-- [ ] handle adding duplicate id
-- [ ] handle updating inexistent id
-- [ ] limit amount of transactions kept in state
 - [ ] allow editing transactions
 - [ ] allow deleting transactions
 - [ ] allow editing categories
