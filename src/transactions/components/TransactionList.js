@@ -5,14 +5,16 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import slice from "../slice";
 
-function Transaction({ charge, description }) {
+function Transaction({ charge, category, description }) {
   const prefix = charge < 0 ? "-" : "";
   const formatted = Math.abs(charge).toFixed(2);
-  return <List.Item title={`${prefix}$${formatted} ${description}`} />;
+  const desc = description ? ` - ${description}` : "";
+  return <List.Item title={`${prefix}$${formatted} ${category}${desc}`} />;
 }
 
 Transaction.propTypes = {
   charge: PropTypes.number.isRequired,
+  category: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired
 };
 

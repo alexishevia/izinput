@@ -9,7 +9,7 @@ import LogoutButton from "./LogoutButton";
 
 function LoggedOut() {
   return (
-    <View style={{ flex: 1 }}>
+    <View>
       <Text>
         You can connect to Dropbox and sync your transactions to a file.
       </Text>
@@ -112,7 +112,7 @@ class DropboxSettings extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1, margin: 5 }}>
+      <View>
         <Title>Dropbox</Title>
         {this.renderContent()}
       </View>

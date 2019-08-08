@@ -17,6 +17,9 @@ The redux store used by IZ Input has the following format:
   // current screen being displayed
   route: "/home",
 
+  // available categories
+  categories: ["foo", "bar"],
+
   // all financial transactions recorded by the app
   transactions: {
     [id1]: { ...transaction1 },
@@ -70,6 +73,18 @@ Transactions can only be modified using these actions:
 { "type": "transactions/delete", "payload": { id, deletedAt } }
 ```
 
+Categories can only be modified using these actions:
+
+```
+{ "type": "categories/new", "payload": "category name" },
+{ "type": "categories/rename", "payload": { "from": "old category name", "to": "new category name" },
+{ "type": "categories/delete", "payload": "category name" }
+```
+
+Notes:
+- On `categories/rename`, all transactions with the old category name are updated.
+- On `categories/delete`, all transactions with the old category name are marked as `category: ""`.
+
 ## Conflicts
 
 The following operations are considered conflicts, and are **ignored** by reducers:
@@ -77,6 +92,9 @@ The following operations are considered conflicts, and are **ignored** by reduce
 - `transactions/put` with `modifiedAt <= existingTransaction.modifiedAt`.
 - `transactions/put` with `deletedAt <= existingTransaction.modifiedAt`.
 - `transactions/delete` with `deletedAt <= existingTransaction.modifiedAt`.
+- `categories/new` with a duplicate value.
+- `categories/rename` on a non-existent category.
+- `categories/delete` on a non-existent category.
 
 ## Sync
 

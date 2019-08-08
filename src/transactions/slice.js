@@ -1,5 +1,6 @@
 import { createSlice } from "redux-starter-kit";
 import uuid from "uuid/v1";
+import categories from "../categories/slice";
 
 function isPutConflict(prevTx, newTx) {
   if (!prevTx) return false;
@@ -35,6 +36,12 @@ const slice = createSlice({
       }
       return { ...state, [transaction.id]: transaction };
     }
+  },
+  extraReducers: {
+    [categories.actions.rename]: (state, { payload: { from, to } }) =>
+      state.map(tx => (tx.category === from ? { ...tx, category: to } : tx)),
+    [categories.actions.delete]: (state, { payload: name }) =>
+      state.map(tx => (tx.category === name ? { ...tx, category: "" } : tx))
   }
 });
 

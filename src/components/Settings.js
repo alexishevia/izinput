@@ -1,16 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { View } from "react-native";
+import { View, ScrollView } from "react-native";
 import Header from "./Header";
 import router from "../router/slice";
 import DropboxSettings from "../Dropbox/components/Settings";
+import CategorySettings from "../categories/components/Settings";
 
 function Settings({ goToHome, goToDropboxFilePicker }) {
   return (
     <View style={{ flex: 1 }}>
       <Header title="Settings" onGoBack={() => goToHome()} />
-      <DropboxSettings openFilePicker={goToDropboxFilePicker} />
+      <ScrollView style={{ flex: 1, margin: 8 }}>
+        <DropboxSettings openFilePicker={goToDropboxFilePicker} />
+        <CategorySettings />
+      </ScrollView>
     </View>
   );
 }
