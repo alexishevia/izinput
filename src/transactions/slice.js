@@ -96,12 +96,6 @@ slice.actions.delete.toString = () => maskedDelete.toString();
 slice.selectors = {
   active: state => {
     return Object.values(state.transactions).filter(tx => !tx.deletedAt);
-  },
-  newest: state => {
-    return slice.selectors
-      .active(state)
-      .sort(sortByModifiedAt)
-      .filter((tx, i) => i < 10);
   }
 };
 

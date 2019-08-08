@@ -1,5 +1,3 @@
-- [ ] allow editing transactions
-- [ ] allow deleting transactions
 - [ ] allow editing categories
 - [ ] allow deleting categories
 - [ ] add error indicator to new transaction form
