@@ -3,7 +3,7 @@ import { View, StyleSheet, Picker } from "react-native";
 import PropTypes from "prop-types";
 import { TextInput, Button } from "react-native-paper";
 import { connect } from "react-redux";
-import transactionsSlice from "../slice";
+import transactionsSlice, { TYPES as transactionTypes } from "../slice";
 import categoriesSlice from "../../categories/slice";
 import syncThunk from "../../sync/thunk";
 
@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
 const initialState = () => ({
   charge: "",
   category: "",
-  description: ""
+  description: "",
+  type: transactionTypes.CASH
 });
 
 class NewTransaction extends React.Component {
@@ -34,7 +35,7 @@ class NewTransaction extends React.Component {
   }
 
   save() {
-    const { charge, category, description } = this.state;
+    const { charge, category, description, type } = this.state;
     const { categories, onAdd, sync } = this.props;
     const chargeAmount = parseFloat(charge, 10);
     if (chargeAmount === 0 || Number.isNaN(chargeAmount)) {
@@ -43,14 +44,15 @@ class NewTransaction extends React.Component {
     onAdd({
       charge: chargeAmount,
       category: category || categories[0],
-      description
+      description,
+      type: type || Object.values(transactionTypes)[0]
     });
     sync();
     this.setState(initialState());
   }
 
   render() {
-    const { charge, category, description } = this.state;
+    const { charge, category, description, type } = this.state;
     const { categories } = this.props;
     return (
       <View style={styles.container}>
@@ -85,6 +87,37 @@ class NewTransaction extends React.Component {
           value={description}
           onChangeText={val => this.setState({ description: val })}
         />
+        <View
+          style={[
+            styles.input,
+            { flexDirection: "row", justifyContent: "center" }
+          ]}
+        >
+          <Button
+            icon="local-atm"
+            style={styles.input}
+            mode={type === transactionTypes.CASH ? "contained" : "outlined"}
+            onPress={() => this.setState({ type: transactionTypes.CASH })}
+          >
+            Cash
+          </Button>
+          <Button
+            icon="credit-card"
+            style={styles.input}
+            mode={type === transactionTypes.CREDIT ? "contained" : "outlined"}
+            onPress={() => this.setState({ type: transactionTypes.CREDIT })}
+          >
+            Credit
+          </Button>
+          <Button
+            icon="account-balance"
+            style={styles.input}
+            mode={type === transactionTypes.TRANSFER ? "contained" : "outlined"}
+            onPress={() => this.setState({ type: transactionTypes.TRANSFER })}
+          >
+            Transfer
+          </Button>
+        </View>
         <Button
           style={styles.input}
           icon="attach-money"
@@ -110,9 +143,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAdd: ({ charge, category, description }) => {
-    dispatch(transactionsSlice.actions.put({ charge, category, description }));
-  },
+  onAdd: tx => dispatch(transactionsSlice.actions.put(tx)),
   sync: () => dispatch(syncThunk())
 });
 

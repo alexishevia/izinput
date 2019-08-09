@@ -56,6 +56,7 @@ A transaction looks like this:
   id: "123",        // string. unique identifier for the transaction.
   charge: 12.50,    // float. amount of money paid.
   category: "food"  // string. indicates the type of transaction that was executed.
+  type: "CASH"      // string. One of: "CASH", "CREDIT", "TRANSFER"
   description: "foo bar", // string. optional. description for the transaction.
   modifiedAt: "2019-07-25T01:39:17.591Z" // string. date in ISO 8601 format. last modification date.
   deletedAt: "2019-07-28T21:37:39.106Z"  // string or undefined. date in ISO 8601 format. last deletion date.

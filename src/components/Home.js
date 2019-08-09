@@ -31,6 +31,7 @@ class Home extends React.Component {
         {active ? (
           <EditTransaction
             transaction={active}
+            key={active.id}
             onDone={() => this.setState({ active: null })}
           />
         ) : (

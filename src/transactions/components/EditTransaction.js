@@ -1,9 +1,9 @@
 import React from "react";
-import { View, StyleSheet, Picker } from "react-native";
+import { View, StyleSheet, Picker, Alert } from "react-native";
 import PropTypes from "prop-types";
 import { TextInput, Button } from "react-native-paper";
 import { connect } from "react-redux";
-import transactionsSlice from "../slice";
+import transactionsSlice, { TYPES as transactionTypes } from "../slice";
 import categoriesSlice from "../../categories/slice";
 
 const styles = StyleSheet.create({
@@ -19,18 +19,19 @@ class EditTransaction extends React.Component {
   constructor(props) {
     super(props);
     const {
-      transaction: { id, charge, category, description }
-    } = this.props;
+      transaction: { id, charge, category, description, type }
+    } = props;
     this.state = {
       id,
       charge: `${charge}`,
       category: category || "",
-      description: description || ""
+      description: description || "",
+      type
     };
   }
 
   save() {
-    const { id, charge, category, description } = this.state;
+    const { id, charge, category, description, type } = this.state;
     const { categories, onEdit, onDone } = this.props;
     const chargeAmount = parseFloat(charge, 10);
     if (chargeAmount === 0 || Number.isNaN(chargeAmount)) {
@@ -40,7 +41,8 @@ class EditTransaction extends React.Component {
       id,
       charge: chargeAmount,
       category: category || categories[0],
-      description
+      description,
+      type
     });
     onDone();
   }
@@ -48,12 +50,24 @@ class EditTransaction extends React.Component {
   delete() {
     const { id } = this.state;
     const { onDelete, onDone } = this.props;
-    onDelete(id);
-    onDone();
+    Alert.alert(
+      "Delete Transaction",
+      `Are you sure you want to delete the transaction?`,
+      [
+        { text: "Cancel", onPress: () => false, style: "cancel" },
+        {
+          text: "Delete",
+          onPress: () => {
+            onDelete(id);
+            onDone();
+          }
+        }
+      ]
+    );
   }
 
   render() {
-    const { charge, category, description } = this.state;
+    const { charge, category, description, type } = this.state;
     const { categories, onDone } = this.props;
     return (
       <View style={styles.container}>
@@ -88,7 +102,38 @@ class EditTransaction extends React.Component {
           value={description}
           onChangeText={val => this.setState({ description: val })}
         />
-        <View style={{ flexDirection: "row" }}>
+        <View
+          style={[
+            styles.input,
+            { flexDirection: "row", justifyContent: "center" }
+          ]}
+        >
+          <Button
+            icon="local-atm"
+            style={styles.input}
+            mode={type === transactionTypes.CASH ? "contained" : "outlined"}
+            onPress={() => this.setState({ type: transactionTypes.CASH })}
+          >
+            Cash
+          </Button>
+          <Button
+            icon="credit-card"
+            style={styles.input}
+            mode={type === transactionTypes.CREDIT ? "contained" : "outlined"}
+            onPress={() => this.setState({ type: transactionTypes.CREDIT })}
+          >
+            Credit
+          </Button>
+          <Button
+            icon="account-balance"
+            style={styles.input}
+            mode={type === transactionTypes.TRANSFER ? "contained" : "outlined"}
+            onPress={() => this.setState({ type: transactionTypes.TRANSFER })}
+          >
+            Transfer
+          </Button>
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
           <Button
             style={styles.input}
             icon="edit"
@@ -128,7 +173,8 @@ EditTransaction.propTypes = {
     id: PropTypes.string.isRequired,
     charge: PropTypes.number.isRequired,
     category: PropTypes.string,
-    description: PropTypes.string
+    description: PropTypes.string,
+    type: PropTypes.string.isRequired
   }).isRequired,
   onDone: PropTypes.func.isRequired,
 
@@ -143,11 +189,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onEdit: ({ id, charge, category, description }) => {
-    dispatch(
-      transactionsSlice.actions.put({ id, charge, category, description })
-    );
-  },
+  onEdit: tx => dispatch(transactionsSlice.actions.put(tx)),
   onDelete: id => dispatch(transactionsSlice.actions.delete(id))
 });
 

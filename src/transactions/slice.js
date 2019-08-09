@@ -2,7 +2,13 @@ import { createSlice } from "redux-starter-kit";
 import uuid from "uuid/v1";
 import categories from "../categories/slice";
 
-const MAX_TRANSACTIONS = 10;
+const MAX_TRANSACTIONS = 15;
+
+export const TYPES = {
+  CASH: "CASH",
+  CREDIT: "CREDIT",
+  TRANSFER: "TRANSFER"
+};
 
 function sortByModifiedAt(txA, txB) {
   return new Date(txB.modifiedAt) - new Date(txA.modifiedAt);
@@ -77,11 +83,12 @@ const slice = createSlice({
 });
 
 const maskedPut = slice.actions.put;
-slice.actions.put = ({ id, charge, category, description }) =>
+slice.actions.put = ({ id, charge, category, description, type }) =>
   maskedPut({
     id: id || uuid(),
     charge,
     category,
+    type,
     description,
     modifiedAt: new Date().toISOString()
   });

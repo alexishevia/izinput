@@ -3,15 +3,22 @@ import { FlatList } from "react-native";
 import { List } from "react-native-paper";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import slice from "../slice";
+import slice, { TYPES as transactionTypes } from "../slice";
 
-function Transaction({ charge, category, description, onPress }) {
+const ICONS = {
+  [transactionTypes.CREDIT]: "💳",
+  [transactionTypes.CASH]: "💵",
+  [transactionTypes.TRANSFER]: "🏦"
+};
+
+function Transaction({ charge, category, description, type, onPress }) {
   const prefix = charge < 0 ? "-" : "";
   const formatted = Math.abs(charge).toFixed(2);
+  const icon = ICONS[type] || "  ";
   const desc = description ? ` - ${description}` : "";
   return (
     <List.Item
-      title={`${prefix}$${formatted} ${category}${desc}`}
+      title={`${icon} ${prefix}$${formatted} ${category}${desc}`}
       onPress={onPress}
     />
   );
@@ -21,6 +28,7 @@ Transaction.propTypes = {
   charge: PropTypes.number.isRequired,
   category: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired
 };
 
@@ -45,6 +53,7 @@ TransactionList.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       charge: PropTypes.number.isRequired,
+      type: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired
     })
   ).isRequired
