@@ -60,7 +60,7 @@ TransactionList.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  transactions: slice.selectors.active(state)
+  transactions: slice.selectors.latest(state)
 });
 
 const mapDispatchToProps = () => ({});

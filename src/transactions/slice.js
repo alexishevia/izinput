@@ -2,23 +2,16 @@ import { createSlice } from "redux-starter-kit";
 import uuid from "uuid/v1";
 import categories from "../categories/slice";
 
-const MAX_TRANSACTIONS = 15;
-
 export const TYPES = {
   CASH: "CASH",
   CREDIT: "CREDIT",
   TRANSFER: "TRANSFER"
 };
 
+const MAX_TRANSACTIONS = 10;
+
 function sortByModifiedAt(txA, txB) {
   return new Date(txB.modifiedAt) - new Date(txA.modifiedAt);
-}
-
-function limitTransactions(transactions) {
-  return Object.entries(transactions)
-    .sort(([, txA], [, txB]) => sortByModifiedAt(txA, txB))
-    .filter((_, i) => i < MAX_TRANSACTIONS)
-    .reduce((memo, [id, tx]) => ({ ...memo, [id]: tx }), {});
 }
 
 function isPutConflict(prevTx, newTx) {
@@ -43,40 +36,36 @@ const slice = createSlice({
         console.log(`conflict: ignoring PUT action for ${transaction.id}`);
         return state;
       }
-      return limitTransactions({
+      return {
         ...state,
         [transaction.id]: { ...state[transaction.id], ...transaction }
-      });
+      };
     },
     delete: (state, { payload: transaction }) => {
       if (isDeleteConflict(state[transaction.id], transaction)) {
         console.log(`conflict: ignoring DELETE action for ${transaction.id}`);
         return state;
       }
-      return limitTransactions({ ...state, [transaction.id]: transaction });
+      return { ...state, [transaction.id]: transaction };
     }
   },
   extraReducers: {
     [categories.actions.rename]: (state, { payload: { from, to } }) => {
-      return limitTransactions(
-        Object.entries(state).reduce(
-          (memo, [id, tx]) => ({
-            ...memo,
-            [id]: tx.category === from ? { ...tx, category: to } : tx
-          }),
-          {}
-        )
+      return Object.entries(state).reduce(
+        (memo, [id, tx]) => ({
+          ...memo,
+          [id]: tx.category === from ? { ...tx, category: to } : tx
+        }),
+        {}
       );
     },
     [categories.actions.delete]: (state, { payload: name }) => {
-      return limitTransactions(
-        Object.entries(state).reduce(
-          (memo, [id, tx]) => ({
-            ...memo,
-            [id]: tx.category === name ? { ...tx, category: "" } : tx
-          }),
-          {}
-        )
+      return Object.entries(state).reduce(
+        (memo, [id, tx]) => ({
+          ...memo,
+          [id]: tx.category === name ? { ...tx, category: "" } : tx
+        }),
+        {}
       );
     }
   }
@@ -103,6 +92,12 @@ slice.actions.delete.toString = () => maskedDelete.toString();
 slice.selectors = {
   active: state => {
     return Object.values(state.transactions).filter(tx => !tx.deletedAt);
+  },
+  latest: state => {
+    return slice.selectors
+      .active(state)
+      .sort(sortByModifiedAt)
+      .filter((_, i) => i < MAX_TRANSACTIONS);
   }
 };
 
