@@ -16,9 +16,12 @@ const reducer = combineReducers({
 });
 
 export default syncReducer(reducer, {
-  whitelist: ["transactions"],
+  whitelist: ["transactions", "categories"],
   actionsToSync: [
     transactions.actions.put.toString(),
-    transactions.actions.delete.toString()
+    transactions.actions.delete.toString(),
+    categories.actions.new.toString(),
+    categories.actions.rename.toString(),
+    categories.actions.delete.toString()
   ]
 });
