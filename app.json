@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "izInput",
+    "scheme": "izinput",
     "slug": "izinput",
     "privacy": "public",
     "sdkVersion": "33.0.0",
