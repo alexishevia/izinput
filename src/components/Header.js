@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Linking } from "react-native";
 import { Appbar, IconButton, Menu, withTheme } from "react-native-paper";
 import router from "../router/slice";
-import syncThunk from "../sync/thunk";
+import syncThunk from "../syncThunk";
 
 const { ROUTES } = router;
 

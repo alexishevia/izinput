@@ -10,7 +10,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import thunk from "redux-thunk";
 import { PersistGate } from "redux-persist/integration/react";
 
-import reducer from "./src/reducer";
+import reduxFileSync from "./src/reduxFileSync";
 import Root from "./src/components/Root";
 
 const persistConfig = {
@@ -19,7 +19,7 @@ const persistConfig = {
   blacklist: ["errors"]
 };
 
-const persistedReducer = persistReducer(persistConfig, reducer);
+const persistedReducer = persistReducer(persistConfig, reduxFileSync.reducer);
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

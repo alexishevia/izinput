@@ -5,7 +5,7 @@ import { TextInput, Button } from "react-native-paper";
 import { connect } from "react-redux";
 import transactionsSlice, { TYPES as transactionTypes } from "../slice";
 import categoriesSlice from "../../categories/slice";
-import syncThunk from "../../sync/thunk";
+import syncThunk from "../../syncThunk";
 
 const styles = StyleSheet.create({
   container: {
