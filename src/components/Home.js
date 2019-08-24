@@ -6,7 +6,7 @@ import Header from "./Header";
 import NewTransaction from "../transactions/components/NewTransaction";
 import EditTransaction from "../transactions/components/EditTransaction";
 import TransactionList from "../transactions/components/TransactionList";
-import SyncState from "../sync/components/SyncState";
+import SyncState from "./SyncState";
 import transactionsSlice from "../transactions/slice";
 
 class Home extends React.Component {

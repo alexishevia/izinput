@@ -4,14 +4,8 @@ import { View, Text } from "react-native";
 import { Portal, Dialog, Button, IconButton } from "react-native-paper";
 import { connect } from "react-redux";
 import {
-  getSyncState,
-  getErrorMessage,
-  UNKNOWN,
-  SYNCED,
-  PENDING,
-  RUNNING,
-  FAILED
-} from "../selectors";
+  getSyncState, getErrorMessage, UNKNOWN, SYNCED, PENDING, RUNNING, FAILED
+} from "redux-file-sync/lib/selectors";
 
 const renderers = {
   [SYNCED]: {
