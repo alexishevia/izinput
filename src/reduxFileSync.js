@@ -1,4 +1,3 @@
-import { AsyncStorage } from "react-native";
 import ReduxFileSync from "redux-file-sync";
 import transactions from "./transactions/slice";
 import categories from "./categories/slice";
@@ -12,8 +11,7 @@ const reduxFileSync = new ReduxFileSync(rootReducer, {
     categories.actions.rename.toString(),
     categories.actions.delete.toString()
   ],
-  whitelist: ["transactions", "categories"],
-  localStorage: AsyncStorage
+  whitelist: ["transactions", "categories"]
 });
 
 export default reduxFileSync;

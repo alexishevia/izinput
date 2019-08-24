@@ -1,27 +1,26 @@
 /* eslint no-param-reassign: [0] */
 
 import { createStore } from "redux";
-import reducer from "../../src/reducer";
-import sync from "../../src/sync";
-import { getSyncState, getLocalActions } from "../../src/sync/selectors";
+import { getSyncState, getLocalActions } from "redux-file-sync/lib/selectors";
+import reduxFileSync from "../../src/reduxFileSync";
 import transactionsSlice from "../../src/transactions/slice";
 import MemoryLocalStorage from "./MemoryLocalStorage";
 import MemoryRemoteStorage from "./MemoryRemoteStorage";
 
-export default function TestApp({ localStorage, remoteStorage } = {}) {
-  const store = createStore(reducer);
+export default function TestApp({ localStorage, cloudStorage } = {}) {
+  const store = createStore(reduxFileSync.reducer);
   localStorage = localStorage || new MemoryLocalStorage();
-  remoteStorage = remoteStorage || new MemoryRemoteStorage();
+  cloudStorage = cloudStorage || new MemoryRemoteStorage();
 
   function appsync() {
-    return sync({ store, localStorage, remoteStorage });
+    return reduxFileSync.sync({ store, localStorage, cloudStorage });
   }
 
   function addTransaction(props) {
-    store.dispatch(transactionsSlice.actions.put(props));
+    return store.dispatch(transactionsSlice.actions.put(props));
   }
 
-  // add transactions in sequence, waiting 1 ms between each
+  // add transactions in sequence
   async function addTransactions(txsArr) {
     return txsArr.reduce((promise, tx) => {
       return promise.then(() => addTransaction(tx));
@@ -39,8 +38,8 @@ export default function TestApp({ localStorage, remoteStorage } = {}) {
     get localStorage() {
       return localStorage;
     },
-    get remoteStorage() {
-      return remoteStorage;
+    get cloudStorage() {
+      return cloudStorage;
     },
     get transactions() {
       return transactionsSlice.selectors.active(store.getState());

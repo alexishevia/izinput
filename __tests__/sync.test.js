@@ -1,5 +1,5 @@
+import { SYNCED } from "redux-file-sync/lib/selectors";
 import TestApp from "./helpers/TestApp";
-import { SYNCED } from "../src/sync/selectors";
 
 function pick(obj, keys) {
   return Object.entries(obj).reduce((memo, [key, val]) => {
@@ -59,7 +59,7 @@ describe("sync()", () => {
       await oldApp.addTransactions(txData);
       await oldApp.sync();
 
-      newApp = new TestApp({ remoteStorage: oldApp.remoteStorage });
+      newApp = new TestApp({ cloudStorage: oldApp.cloudStorage });
       await newApp.sync();
     });
 
@@ -94,7 +94,7 @@ describe("sync()", () => {
 
     beforeEach(async () => {
       appA = new TestApp();
-      appB = new TestApp({ remoteStorage: appA.remoteStorage });
+      appB = new TestApp({ cloudStorage: appA.cloudStorage });
 
       await appA.addTransaction(txData[0]);
       await appB.addTransaction(txData[1]);
@@ -131,7 +131,7 @@ describe("sync()", () => {
 
     beforeEach(async () => {
       appA = new TestApp();
-      appB = new TestApp({ remoteStorage: appA.remoteStorage });
+      appB = new TestApp({ cloudStorage: appA.cloudStorage });
 
       await appA.addTransaction({
         charge: 5.0,
@@ -152,6 +152,7 @@ describe("sync()", () => {
       beforeEach(async () => {
         await appA.sync();
         await appB.sync();
+        await appA.sync();
       });
 
       it("ignores conflicting changes in app B", () => {
@@ -165,6 +166,7 @@ describe("sync()", () => {
       beforeEach(async () => {
         await appB.sync();
         await appA.sync();
+        await appB.sync();
       });
 
       it("ignores conflicting changes in app A", () => {
