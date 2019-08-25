@@ -25,23 +25,6 @@ The redux store used by IZ Input has the following format:
     [id1]: { ...transaction1 },
     [id2]: { ...transaction2 },
   },
-
-  // stores info regarding which Dropbox account/file to sync with
-  dropbox: {
-    accessToken: "foobar",
-    filepath: "/path/to/file.ndjson"
-  }
-
-  _sync: {
-    // actions that have been recorded locally but not synced to Dropbox yet
-    localActions: [ { ...action1 }, { ...action2 } ],
-
-    // timestamps for sync attemtps
-    startedAt: "2019-07-28T22:19:23.102Z",
-    succeededAt: "2019-07-28T22:19:41.181Z",
-    failedAt: "2019-07-28T22:19:00.843Z",
-    errorMessage: "Something went wrong."
-  }
 }
 ```
 

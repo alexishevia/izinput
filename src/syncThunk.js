@@ -1,14 +1,18 @@
 import { AsyncStorage } from "react-native";
-import DropboxRemoteStorage from "./Dropbox/RemoteStorage";
+import { provider, selectors } from "redux-file-sync/lib/dropbox";
 import reduxFileSync from "./reduxFileSync";
 
+const { getAccessToken, getFilePath } = selectors;
+
 const syncThunk = () => (dispatch, getState) => {
-  const store = { dispatch, getState };
-  const cloudStorage = new DropboxRemoteStorage(store);
+  const state = getState();
+  const accessToken = getAccessToken(state);
+  const path = getFilePath(state);
+
   return reduxFileSync.sync({
-    store,
+    store: { dispatch, getState },
     localStorage: AsyncStorage,
-    cloudStorage
+    cloudStorage: provider({ accessToken, path })
   });
 };
 
