@@ -3,10 +3,13 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { View, FlatList } from "react-native";
 import { ActivityIndicator, Portal, Paragraph } from "react-native-paper";
+import { selectors, actions } from "redux-file-sync/lib/dropbox";
 import loadDir from "../api/loadDir";
-import slice from "../slice";
 import Header from "./FilePickerHeader";
 import FilePickerItem from "./FilePickerItem";
+
+const { getAccessToken } = selectors;
+const { selectFile } = actions;
 
 const isFile = node => node.fileType === "file";
 const isDir = node => node.fileType === "directory";
@@ -148,12 +151,12 @@ FilePicker.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  accessToken: slice.selectors.getAccessToken(state)
+  accessToken: getAccessToken(state)
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onFilePick: filepath => {
-    dispatch(slice.actions.selectFile(filepath));
+    dispatch(selectFile(filepath));
     ownProps.onSuccess();
   }
 });

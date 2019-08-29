@@ -3,9 +3,15 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { View, Alert } from "react-native";
 import { Title, Text, Button } from "react-native-paper";
-import slice from "../slice";
+import { selectors } from "redux-file-sync/lib/dropbox";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
+
+const {
+  isLoggedIn: getIsLoggedIn,
+  isFileSelected: getIsFileSelected,
+  getFilePath
+} = selectors;
 
 function LoggedOut() {
   return (
@@ -135,9 +141,9 @@ DropboxSettings.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  isLoggedIn: slice.selectors.isLoggedIn(state),
-  isFileSelected: slice.selectors.isFileSelected(state),
-  filepath: slice.selectors.getFilePath(state)
+  isLoggedIn: getIsLoggedIn(state),
+  isFileSelected: getIsFileSelected(state),
+  filepath: getFilePath(state)
 });
 
 const mapDispatchToProps = () => ({});

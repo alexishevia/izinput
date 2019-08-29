@@ -2,14 +2,16 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Button } from "react-native-paper";
 import { connect } from "react-redux";
-import login from "../api/login";
-import slice from "../slice";
+import { actions } from "redux-file-sync/lib/dropbox";
+import loginRequest from "../api/login";
 import errors from "../../errors/slice";
+
+const { login } = actions;
 
 const loginToDropbox = () => async dispatch => {
   try {
-    const accessToken = await login();
-    dispatch(slice.actions.login(accessToken));
+    const accessToken = await loginRequest();
+    dispatch(login(accessToken));
   } catch (err) {
     dispatch(
       errors.actions.push({ error: err, description: "connecting to Dropbox" })
