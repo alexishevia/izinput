@@ -8,23 +8,15 @@ import errors from "../errors/slice";
 import Errors from "../errors/components/Errors";
 import Home from "./Home";
 import Settings from "./Settings";
-import DropboxFilePicker from "../Dropbox/components/FilePicker";
 
 const { ROUTES } = router;
 
 class Root extends React.Component {
   renderScreen() {
-    const { route, goToHome, goToSettings, onError } = this.props;
+    const { route } = this.props;
     const screen = {
       [ROUTES.HOME]: () => <Home />,
-      [ROUTES.SETTINGS]: () => <Settings />,
-      [ROUTES.DROPBOX_FILE_PICKER]: () => (
-        <DropboxFilePicker
-          onSuccess={goToHome}
-          onCancel={goToSettings}
-          onError={onError}
-        />
-      )
+      [ROUTES.SETTINGS]: () => <Settings />
     }[route];
     return screen();
   }
@@ -47,10 +39,7 @@ Root.defaultProps = {
 
 Root.propTypes = {
   // redux props
-  route: PropTypes.string,
-  goToSettings: PropTypes.func.isRequired,
-  goToHome: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired
+  route: PropTypes.string
 };
 
 const mapStateToProps = state => ({

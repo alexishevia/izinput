@@ -26,6 +26,7 @@
     "redux-persist": "^5.10.0",
     "redux-starter-kit": "^0.6.1",
     "redux-thunk": "^2.3.0",
+    "rn-dropbox-filepicker": "0.0.4",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
