@@ -3,7 +3,9 @@ import { FlatList } from "react-native";
 import { List } from "react-native-paper";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import slice, { TYPES as transactionTypes } from "../slice";
+import { transactions as transactionsSlice } from "izreducer";
+
+const { TYPES: transactionTypes } = transactionsSlice;
 
 const ICONS = {
   [transactionTypes.CREDIT]: "💳",
@@ -60,7 +62,7 @@ TransactionList.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  transactions: slice.selectors.latest(state)
+  transactions: transactionsSlice.selectors.latest(state)
 });
 
 const mapDispatchToProps = () => ({});

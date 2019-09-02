@@ -1,6 +1,5 @@
+import { categories, transactions } from "izreducer";
 import ReduxFileSync from "redux-file-sync";
-import transactions from "./transactions/slice";
-import categories from "./categories/slice";
 import rootReducer from "./reducer";
 
 const reduxFileSync = new ReduxFileSync(rootReducer, {

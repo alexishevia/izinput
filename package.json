@@ -14,6 +14,7 @@
   "dependencies": {
     "dropbox": "^4.0.28",
     "expo": "^33.0.0",
+    "izreducer": "0.0.3",
     "prop-types": "^15.7.2",
     "react": "16.8.3",
     "react-dom": "^16.8.6",

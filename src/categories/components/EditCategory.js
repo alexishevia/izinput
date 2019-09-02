@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { View, StyleSheet, Alert } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import categoriesSlice from "../slice";
+import { categories as categoriesSlice } from "izreducer";
 
 const styles = StyleSheet.create({
   button: {

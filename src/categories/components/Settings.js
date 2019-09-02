@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { View } from "react-native";
 import { Title } from "react-native-paper";
-import categoriesSlice from "../slice";
+import { categories as categoriesSlice } from "izreducer";
 import EditCategory from "./EditCategory";
 import AddCategory from "./AddCategory";
 

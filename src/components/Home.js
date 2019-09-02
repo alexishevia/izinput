@@ -2,12 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import { View } from "react-native";
 import { connect } from "react-redux";
+import { transactions as transactionsSlice } from "izreducer";
 import Header from "./Header";
 import NewTransaction from "../transactions/components/NewTransaction";
 import EditTransaction from "../transactions/components/EditTransaction";
 import TransactionList from "../transactions/components/TransactionList";
 import SyncState from "./SyncState";
-import transactionsSlice from "../transactions/slice";
 
 class Home extends React.Component {
   constructor(props) {

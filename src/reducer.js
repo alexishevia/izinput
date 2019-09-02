@@ -1,7 +1,6 @@
 import { combineReducers } from "redux";
+import { transactions, categories } from "izreducer";
 import router from "./router/slice";
-import transactions from "./transactions/slice";
-import categories from "./categories/slice";
 import errors from "./errors/slice";
 
 export default combineReducers({

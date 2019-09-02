@@ -3,8 +3,12 @@ import { View, StyleSheet, Picker, Alert } from "react-native";
 import PropTypes from "prop-types";
 import { TextInput, Button } from "react-native-paper";
 import { connect } from "react-redux";
-import transactionsSlice, { TYPES as transactionTypes } from "../slice";
-import categoriesSlice from "../../categories/slice";
+import {
+  transactions as transactionsSlice,
+  categories as categoriesSlice
+} from "izreducer";
+
+const { TYPES: transactionTypes } = transactionsSlice;
 
 const styles = StyleSheet.create({
   container: {
