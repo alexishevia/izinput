@@ -17,10 +17,10 @@ function Transaction({ charge, category, description, type, onPress }) {
   const prefix = charge < 0 ? "-" : "";
   const formatted = Math.abs(charge).toFixed(2);
   const icon = ICONS[type] || "  ";
-  const desc = description ? ` - ${description}` : "";
   return (
     <List.Item
-      title={`${icon} ${prefix}$${formatted} ${category}${desc}`}
+      title={`${icon} ${prefix}$${formatted} ${category}`}
+      description={description}
       onPress={onPress}
     />
   );
