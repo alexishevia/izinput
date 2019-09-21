@@ -1,4 +1,3 @@
-- [ ] move description into a new line
 - [ ] keep last used category selected
 - [ ] add error indicator to new transaction form
 - [ ] use react-native-paper theme for button colors

@@ -14,7 +14,7 @@
   "dependencies": {
     "dropbox": "^4.0.28",
     "expo": "^33.0.0",
-    "izreducer": "0.0.3",
+    "izreducer": "^0.1.1",
     "prop-types": "^15.7.2",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
@@ -23,10 +23,11 @@
     "react-native-web": "^0.11.4",
     "react-redux": "^7.1.0",
     "redux": "^4.0.4",
-    "redux-file-sync": "0.0.8",
+    "redux-file-sync": "^0.1.1",
     "redux-persist": "^5.10.0",
     "redux-starter-kit": "^0.6.1",
     "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0",
     "rn-dropbox-filepicker": "0.0.4",
     "uuid": "^3.3.2"
   },

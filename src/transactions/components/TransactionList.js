@@ -3,9 +3,12 @@ import { FlatList } from "react-native";
 import { List } from "react-native-paper";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { createSelector } from "reselect";
 import { transactions as transactionsSlice } from "izreducer";
 
 const { TYPES: transactionTypes } = transactionsSlice;
+
+const MAX_TRANSACTIONS = 10;
 
 const ICONS = {
   [transactionTypes.CREDIT]: "💳",
@@ -13,14 +16,38 @@ const ICONS = {
   [transactionTypes.TRANSFER]: "🏦"
 };
 
-function Transaction({ charge, category, description, type, onPress }) {
+// selectors
+function sortByDateDesc(txA, txB) {
+  const dateA = new Date(txA.transactionDate).getTime();
+  const dateB = new Date(txB.transactionDate).getTime();
+  return dateB - dateA;
+}
+
+const sortedTransactions = createSelector(
+  [transactionsSlice.selectors.active],
+  transactions => transactions.sort(sortByDateDesc)
+);
+
+const latestTransactions = createSelector(
+  [sortedTransactions],
+  transactions => transactions.slice(0, MAX_TRANSACTIONS)
+);
+
+function Transaction({
+  charge,
+  category,
+  transactionDate,
+  description,
+  type,
+  onPress
+}) {
   const prefix = charge < 0 ? "-" : "";
   const formatted = Math.abs(charge).toFixed(2);
   const icon = ICONS[type] || "  ";
   return (
     <List.Item
       title={`${icon} ${prefix}$${formatted} ${category}`}
-      description={description}
+      description={`${description}\n${transactionDate}`}
       onPress={onPress}
     />
   );
@@ -30,6 +57,7 @@ Transaction.propTypes = {
   charge: PropTypes.number.isRequired,
   category: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  transactionDate: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired
 };
@@ -56,13 +84,14 @@ TransactionList.propTypes = {
       id: PropTypes.string.isRequired,
       charge: PropTypes.number.isRequired,
       type: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired
+      description: PropTypes.string.isRequired,
+      transactionDate: PropTypes.string.isRequired
     })
   ).isRequired
 };
 
 const mapStateToProps = state => ({
-  transactions: transactionsSlice.selectors.latest(state)
+  transactions: latestTransactions(state)
 });
 
 const mapDispatchToProps = () => ({});
