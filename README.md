@@ -59,17 +59,8 @@ I'm using the expo cli to publish the app.
 
 More info: https://docs.expo.io/versions/v33.0.0/distribution/building-standalone-apps/
 
-The first step is to generate the APK:
+Whenever I want to push a new version of the app, I run `expo publish`.
 
-```
-expo build:android
-```
+Users will automatically receive the new version the next time they open the app.
 
-Once the APK is installed on a device, updates can be pushed by running:
-
-```
-expo publish
-```
-
-Once a new version is published, users will download the new JS the next time
-they open the app.
+Note: To generate the initial APK I had to run `expo build:android`.
