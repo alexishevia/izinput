@@ -7,6 +7,7 @@ import {
   transactions as transactionsSlice,
   categories as categoriesSlice
 } from "izreducer";
+import DatePicker from "react-native-datepicker";
 
 const { TYPES: transactionTypes } = transactionsSlice;
 
@@ -16,6 +17,10 @@ const styles = StyleSheet.create({
   },
   input: {
     margin: 5
+  },
+  datePicker: {
+    margin: 5,
+    width: undefined
   }
 });
 
@@ -23,19 +28,27 @@ class EditTransaction extends React.Component {
   constructor(props) {
     super(props);
     const {
-      transaction: { id, charge, category, description, type }
+      transaction: { id, charge, category, description, type, transactionDate }
     } = props;
     this.state = {
       id,
       charge: `${charge}`,
       category: category || "",
       description: description || "",
-      type
+      type,
+      transactionDate
     };
   }
 
   save() {
-    const { id, charge, category, description, type } = this.state;
+    const {
+      id,
+      charge,
+      category,
+      description,
+      type,
+      transactionDate
+    } = this.state;
     const { categories, onEdit, onDone } = this.props;
     const chargeAmount = parseFloat(charge, 10);
     if (chargeAmount === 0 || Number.isNaN(chargeAmount)) {
@@ -46,7 +59,8 @@ class EditTransaction extends React.Component {
       charge: chargeAmount,
       category: category || categories[0],
       description,
-      type
+      type,
+      transactionDate
     });
     onDone();
   }
@@ -71,7 +85,7 @@ class EditTransaction extends React.Component {
   }
 
   render() {
-    const { charge, category, description, type } = this.state;
+    const { charge, category, description, type, transactionDate } = this.state;
     const { categories, onDone } = this.props;
     return (
       <View style={styles.container}>
@@ -97,6 +111,22 @@ class EditTransaction extends React.Component {
                 <Picker.Item key={cat} label={cat} value={cat} />
               ))}
             </Picker>
+          )}
+        />
+        <TextInput
+          style={styles.input}
+          label="Fecha Transacción"
+          mode="outlined"
+          value=" "
+          render={() => (
+            <DatePicker
+              style={styles.datePicker}
+              customStyles={{ dateInput: { borderWidth: 0 } }}
+              date={transactionDate}
+              mode="date"
+              format="YYYY-MM-DD"
+              onDateChange={date => this.setState({ transactionDate: date })}
+            />
           )}
         />
         <TextInput
@@ -178,7 +208,8 @@ EditTransaction.propTypes = {
     charge: PropTypes.number.isRequired,
     category: PropTypes.string,
     description: PropTypes.string,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
+    transactionDate: PropTypes.string.isRequired
   }).isRequired,
   onDone: PropTypes.func.isRequired,
 
