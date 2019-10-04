@@ -17,15 +17,19 @@ const ICONS = {
 };
 
 // selectors
-function sortByDateDesc(txA, txB) {
-  const dateA = new Date(txA.transactionDate).getTime();
-  const dateB = new Date(txB.transactionDate).getTime();
-  return dateB - dateA;
+function sortByDateStrDesc(dateStrA, dateStrB) {
+  if (dateStrA < dateStrB) return 1;
+  if (dateStrA > dateStrB) return -1;
+  return 0;
+}
+
+function sortTransactions(txA, txB) {
+  return sortByDateStrDesc(txA.modifiedAt, txB.modifiedAt);
 }
 
 const sortedTransactions = createSelector(
   [transactionsSlice.selectors.active],
-  transactions => transactions.sort(sortByDateDesc)
+  transactions => transactions.sort(sortTransactions)
 );
 
 const latestTransactions = createSelector(
