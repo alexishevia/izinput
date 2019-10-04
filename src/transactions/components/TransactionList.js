@@ -3,39 +3,16 @@ import { FlatList } from "react-native";
 import { List } from "react-native-paper";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { createSelector } from "reselect";
 import { transactions as transactionsSlice } from "izreducer";
+import { latestTransactions } from "../selectors";
 
 const { TYPES: transactionTypes } = transactionsSlice;
-
-const MAX_TRANSACTIONS = 10;
 
 const ICONS = {
   [transactionTypes.CREDIT]: "💳",
   [transactionTypes.CASH]: "💵",
   [transactionTypes.TRANSFER]: "🏦"
 };
-
-// selectors
-function sortByDateStrDesc(dateStrA, dateStrB) {
-  if (dateStrA < dateStrB) return 1;
-  if (dateStrA > dateStrB) return -1;
-  return 0;
-}
-
-function sortTransactions(txA, txB) {
-  return sortByDateStrDesc(txA.modifiedAt, txB.modifiedAt);
-}
-
-const sortedTransactions = createSelector(
-  [transactionsSlice.selectors.active],
-  transactions => transactions.sort(sortTransactions)
-);
-
-const latestTransactions = createSelector(
-  [sortedTransactions],
-  transactions => transactions.slice(0, MAX_TRANSACTIONS)
-);
 
 function Transaction({
   charge,

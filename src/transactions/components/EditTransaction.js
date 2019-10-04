@@ -3,11 +3,9 @@ import { View, StyleSheet, Picker, Alert } from "react-native";
 import PropTypes from "prop-types";
 import { TextInput, Button } from "react-native-paper";
 import { connect } from "react-redux";
-import {
-  transactions as transactionsSlice,
-  categories as categoriesSlice
-} from "izreducer";
+import { transactions as transactionsSlice } from "izreducer";
 import DatePicker from "react-native-datepicker";
+import { sortedCategories } from "../../categories/selectors";
 
 const { TYPES: transactionTypes } = transactionsSlice;
 
@@ -220,7 +218,7 @@ EditTransaction.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  categories: categoriesSlice.selectors.all(state)
+  categories: sortedCategories(state)
 });
 
 const mapDispatchToProps = dispatch => ({
