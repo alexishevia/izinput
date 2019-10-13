@@ -7,7 +7,7 @@
 import { createSlice } from "redux-starter-kit";
 
 const initialState = "";
-const latestVersion = "201909211629"; // Update this value to trigger a full reprocessing
+const latestVersion = "201910122305"; // Update this value to trigger a full reprocessing
 
 const reducerVersion = createSlice({
   slice: "reducerVersion",

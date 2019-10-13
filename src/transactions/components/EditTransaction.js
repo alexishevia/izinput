@@ -7,7 +7,7 @@ import { transactions as transactionsSlice } from "izreducer";
 import DatePicker from "react-native-datepicker";
 import { sortedCategories } from "../../categories/selectors";
 
-const { TYPES: transactionTypes } = transactionsSlice;
+const { TYPES: transactionTypes, CASH_FLOW } = transactionsSlice;
 
 const styles = StyleSheet.create({
   container: {
@@ -26,14 +26,23 @@ class EditTransaction extends React.Component {
   constructor(props) {
     super(props);
     const {
-      transaction: { id, charge, category, description, type, transactionDate }
+      transaction: {
+        id,
+        amount,
+        category,
+        description,
+        type,
+        cashFlow,
+        transactionDate
+      }
     } = props;
     this.state = {
       id,
-      charge: `${charge}`,
+      amount: `${amount}`,
       category: category || "",
       description: description || "",
       type,
+      cashFlow,
       transactionDate
     };
   }
@@ -41,23 +50,25 @@ class EditTransaction extends React.Component {
   save() {
     const {
       id,
-      charge,
+      amount,
       category,
       description,
       type,
+      cashFlow,
       transactionDate
     } = this.state;
     const { categories, onEdit, onDone } = this.props;
-    const chargeAmount = parseFloat(charge, 10);
-    if (chargeAmount === 0 || Number.isNaN(chargeAmount)) {
+    const amountAsFloat = parseFloat(amount, 10);
+    if (amountAsFloat === 0 || Number.isNaN(amountAsFloat)) {
       return;
     }
     onEdit({
       id,
-      charge: chargeAmount,
+      amount: amountAsFloat,
       category: category || categories[0],
       description,
       type,
+      cashFlow,
       transactionDate
     });
     onDone();
@@ -83,16 +94,39 @@ class EditTransaction extends React.Component {
   }
 
   render() {
-    const { charge, category, description, type, transactionDate } = this.state;
+    const {
+      amount,
+      category,
+      description,
+      type,
+      cashFlow,
+      transactionDate
+    } = this.state;
     const { categories, onDone } = this.props;
     return (
       <View style={styles.container}>
+        <View style={[{ flexDirection: "row", justifyContent: "center" }]}>
+          <Button
+            style={styles.input}
+            mode={cashFlow === CASH_FLOW.EXPENSE ? "contained" : "outlined"}
+            onPress={() => this.setState({ cashFlow: CASH_FLOW.EXPENSE })}
+          >
+            Expense
+          </Button>
+          <Button
+            style={styles.input}
+            mode={cashFlow === CASH_FLOW.INCOME ? "contained" : "outlined"}
+            onPress={() => this.setState({ cashFlow: CASH_FLOW.INCOME })}
+          >
+            Income
+          </Button>
+        </View>
         <TextInput
           style={styles.input}
           mode="outlined"
           label="Monto"
-          value={charge}
-          onChangeText={val => this.setState({ charge: val })}
+          value={amount}
+          onChangeText={val => this.setState({ amount: val })}
         />
         <TextInput
           style={styles.input}
@@ -172,7 +206,7 @@ class EditTransaction extends React.Component {
             mode="contained"
             onPress={() => this.save()}
           >
-            Edit
+            Update
           </Button>
           <Button
             style={styles.input}
@@ -203,10 +237,11 @@ EditTransaction.propTypes = {
   // own props
   transaction: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    charge: PropTypes.number.isRequired,
+    amount: PropTypes.number.isRequired,
     category: PropTypes.string,
     description: PropTypes.string,
     type: PropTypes.string.isRequired,
+    cashFlow: PropTypes.string.isRequired,
     transactionDate: PropTypes.string.isRequired
   }).isRequired,
   onDone: PropTypes.func.isRequired,

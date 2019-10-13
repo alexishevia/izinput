@@ -15,31 +15,36 @@ const ICONS = {
 };
 
 function Transaction({
-  charge,
+  amount,
   category,
   transactionDate,
   description,
   type,
+  cashFlow,
   onPress
 }) {
-  const prefix = charge < 0 ? "-" : "";
-  const formatted = Math.abs(charge).toFixed(2);
+  const prefix = amount < 0 ? "-" : "";
+  const formatted = Math.abs(amount).toFixed(2);
   const icon = ICONS[type] || "  ";
+
   return (
     <List.Item
       title={`${icon} ${prefix}$${formatted} ${category}`}
-      description={`${description}\n${transactionDate}`}
+      description={`${(
+        cashFlow || ""
+      ).toLowerCase()}: ${description}\n${transactionDate}`}
       onPress={onPress}
     />
   );
 }
 
 Transaction.propTypes = {
-  charge: PropTypes.number.isRequired,
+  amount: PropTypes.number.isRequired,
   category: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   transactionDate: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  cashFlow: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired
 };
 
@@ -63,8 +68,9 @@ TransactionList.propTypes = {
   transactions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      charge: PropTypes.number.isRequired,
+      amount: PropTypes.number.isRequired,
       type: PropTypes.string.isRequired,
+      cashFlow: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       transactionDate: PropTypes.string.isRequired
     })

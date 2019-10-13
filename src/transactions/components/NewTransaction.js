@@ -6,8 +6,9 @@ import { connect } from "react-redux";
 import { transactions as transactionsSlice } from "izreducer";
 import syncThunk from "../../syncThunk";
 import { sortedCategories } from "../../categories/selectors";
+import { dateToDayStr } from "../../helpers/date";
 
-const { TYPES: transactionTypes } = transactionsSlice;
+const { TYPES: transactionTypes, CASH_FLOW } = transactionsSlice;
 
 const styles = StyleSheet.create({
   container: {
@@ -18,11 +19,17 @@ const styles = StyleSheet.create({
   }
 });
 
+function today() {
+  return dateToDayStr(new Date());
+}
+
 const initialState = () => ({
-  charge: "",
+  amount: "",
   category: "",
   description: "",
-  type: transactionTypes.CASH
+  type: transactionTypes.CASH,
+  cashFlow: CASH_FLOW.EXPENSE,
+  transactionDate: today()
 });
 
 class NewTransaction extends React.Component {
@@ -37,33 +44,59 @@ class NewTransaction extends React.Component {
   }
 
   save() {
-    const { charge, category, description, type } = this.state;
+    const {
+      amount,
+      category,
+      description,
+      type,
+      cashFlow,
+      transactionDate
+    } = this.state;
     const { categories, onAdd, sync } = this.props;
-    const chargeAmount = parseFloat(charge, 10);
-    if (chargeAmount === 0 || Number.isNaN(chargeAmount)) {
+    const amountAsFloat = parseFloat(amount, 10);
+    if (amountAsFloat === 0 || Number.isNaN(amountAsFloat)) {
       return;
     }
     onAdd({
-      charge: chargeAmount,
+      amount: amountAsFloat,
       category: category || categories[0],
       description,
-      type: type || Object.values(transactionTypes)[0]
+      type: type || Object.values(transactionTypes)[0],
+      cashFlow: cashFlow || Object.values(CASH_FLOW)[0],
+      transactionDate
     });
     sync();
     this.setState(initialState());
   }
 
   render() {
-    const { charge, category, description, type } = this.state;
+    const { amount, category, description, type, cashFlow } = this.state;
     const { categories } = this.props;
     return (
       <View style={styles.container}>
+        <View style={[{ flexDirection: "row", justifyContent: "center" }]}>
+          <Button
+            style={styles.input}
+            mode={cashFlow === CASH_FLOW.EXPENSE ? "contained" : "outlined"}
+            onPress={() => this.setState({ cashFlow: CASH_FLOW.EXPENSE })}
+          >
+            Expense
+          </Button>
+          <Button
+            style={styles.input}
+            mode={cashFlow === CASH_FLOW.INCOME ? "contained" : "outlined"}
+            onPress={() => this.setState({ cashFlow: CASH_FLOW.INCOME })}
+          >
+            Income
+          </Button>
+        </View>
+
         <TextInput
           style={styles.input}
           mode="outlined"
           label="Amount"
-          value={charge}
-          onChangeText={val => this.setState({ charge: val })}
+          value={amount}
+          onChangeText={val => this.setState({ amount: val })}
         />
         <TextInput
           style={styles.input}
