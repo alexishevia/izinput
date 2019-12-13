@@ -6,6 +6,13 @@
   "plugins": ["prettier", "jest"],
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "no-console": [0]
+    "no-console": [0],
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": ["memo", "acc"] // allow reducer accumulators to be modified
+      }
+    ]
   }
 }

@@ -1,7 +1,6 @@
 import { createSelector } from "reselect";
 import { transactions as transactionsSlice } from "izreducer";
-
-const MAX_TRANSACTIONS = 30;
+import { MAX_TRANSACTIONS } from "./constants";
 
 function sortByDateStrDesc(dateStrA, dateStrB) {
   if (dateStrA < dateStrB) return 1;
